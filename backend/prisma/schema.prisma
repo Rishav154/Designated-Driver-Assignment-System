@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String         @id @default(uuid())
+  clerkId         String         @unique
+  name            String
+  email           String         @unique
+  phone           String?
+  role            Role           @default(CUSTOMER)
+  createdAt       DateTime       @default(now())
+  driverProfile   DriverProfile?
+  ridesAsCustomer Ride[]         @relation("CustomerRides")
+  ridesAsDriver   Ride[]         @relation("DriverRides")
+  ratingsGiven    Rating[]       @relation("RatingsGiven")
+  ratingsReceived Rating[]       @relation("RatingsReceived")
+}
+
+model DriverProfile {
+  id           String  @id @default(uuid())
+  userId       String  @unique
+  user         User    @relation(fields: [userId], references: [id])
+  licenseNo    String
+  vehicleMake  String
+  vehicleModel String
+  vehiclePlate String
+  isAvailable  Boolean @default(false)
+  rating       Float   @default(5.0)
+}
+
+model Ride {
+  id             String     @id @default(uuid())
+  customerId     String
+  customer       User       @relation("CustomerRides", fields: [customerId], references: [id])
+  driverId       String?
+  driver         User?      @relation("DriverRides", fields: [driverId], references: [id])
+  pickupAddress  String
+  dropoffAddress String
+  pickupLat      Float
+  pickupLng      Float
+  dropoffLat     Float
+  dropoffLng     Float
+  status         RideStatus @default(SEARCHING)
+  fareEstimate   Float
+  fareFinal      Float?
+  createdAt      DateTime   @default(now())
+  completedAt    DateTime?
+  payment        Payment?
+  ratings        Rating[]
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  rideId    String        @unique
+  ride      Ride          @relation(fields: [rideId], references: [id])
+  amount    Float
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+}
+
+model Rating {
+  id      String @id @default(uuid())
+  rideId  String
+  ride    Ride   @relation(fields: [rideId], references: [id])
+  raterId String
+  rater   User   @relation("RatingsGiven", fields: [raterId], references: [id])
+  rateeId String
+  ratee   User   @relation("RatingsReceived", fields: [rateeId], references: [id])
+  score   Int
+  comment String?
+}
+
+enum Role {
+  CUSTOMER
+  DRIVER
+}
+
+enum RideStatus {
+  SEARCHING
+  DRIVER_ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
