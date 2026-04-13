@@ -9,6 +9,7 @@ import LoadingScreen from '@/components/LoadingScreen'
 import StatusBadge from '@/components/StatusBadge'
 import { getApi } from '@/lib/api'
 import { toast } from '@/components/Toast'
+import { useCache } from '@/context/CacheContext'
 
 interface Trip {
   id: string
@@ -38,16 +39,26 @@ function formatDate(dt: string) {
 export default function TripsPage() {
   const { getToken } = useAuth()
   const router = useRouter()
+  const { setCache, getCache } = useCache()
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<HistoryResponse | null>(null)
   const [page, setPage] = useState(1)
 
   const fetchHistory = async (p: number) => {
+    // If we have data for this page, don't show the full-screen loader
+    const cacheKey = `/api/rides/history?page=${p}`
+    const cached = getCache(cacheKey)
+    if (cached && !data) {
+        setData(cached)
+        setLoading(false)
+    }
+
     setLoading(true)
     try {
       const api = await getApi(getToken)
       const res = await api.get(`/api/rides/history?page=${p}&limit=10`)
       setData(res.data)
+      setCache(cacheKey, res.data)
       setPage(p)
     } catch {
       toast('Failed to load trip history', 'error')
@@ -56,7 +67,15 @@ export default function TripsPage() {
     }
   }
 
-  useEffect(() => { fetchHistory(1) }, [])
+  useEffect(() => { 
+    const cacheKey = `/api/rides/history?page=1`
+    const cached = getCache(cacheKey)
+    if (cached) {
+      setData(cached)
+      setLoading(false)
+    }
+    fetchHistory(1) 
+  }, [])
 
   if (loading && !data) return <LoadingScreen />
 

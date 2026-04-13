@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
 import ToastProvider from '@/components/Toast'
+import { CacheProvider } from '@/context/CacheContext'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,15 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html
-        lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      >
-        <body className="min-h-full flex flex-col bg-white">
-          {children}
-          <ToastProvider />
-        </body>
-      </html>
+      <CacheProvider>
+        <html
+          lang="en"
+          className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        >
+          <body className="min-h-full flex flex-col bg-white">
+            {children}
+            <ToastProvider />
+          </body>
+        </html>
+      </CacheProvider>
     </ClerkProvider>
   );
 }

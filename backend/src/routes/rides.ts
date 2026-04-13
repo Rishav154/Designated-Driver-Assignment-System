@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { getAuth } from '@clerk/express'
 import { prisma } from '../lib/prisma.ts'
 import { requireAuth } from '../middleware/requireAuth.ts'
-import { mapplsDistance } from '../utils/mapplsDistance.ts'
+import { osrmDistance } from '../utils/osrmDistance.ts'
 
 const router = Router()
 
@@ -25,7 +25,7 @@ const RATE_PER_KM = 15
 router.post('/estimate', requireAuth, async (req, res) => {
     const { pickupLat, pickupLng, dropoffLat, dropoffLng } = req.body
     try {
-        const { distanceKm, durationSeconds } = await mapplsDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
+        const { distanceKm, durationSeconds } = await osrmDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
         const fare = BASE_FARE + distanceKm * RATE_PER_KM
         res.json({ distance: distanceKm.toFixed(2), fare: Math.round(fare), durationSeconds })
     } catch (error) {
@@ -48,9 +48,9 @@ router.post('/book', requireAuth, async (req, res) => {
     let distance = 0
     let durationSeconds = null
     try {
-        const mapplsRes = await mapplsDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
-        distance = mapplsRes.distanceKm
-        durationSeconds = mapplsRes.durationSeconds
+        const osrmRes = await osrmDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
+        distance = osrmRes.distanceKm
+        durationSeconds = osrmRes.durationSeconds
     } catch (error) {
         distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
     }

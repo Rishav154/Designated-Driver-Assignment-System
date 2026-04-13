@@ -8,7 +8,8 @@ import { ArrowLeft, Phone, Check, Navigation, Flag } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import StatusBadge from '@/components/StatusBadge'
 import ErrorMessage from '@/components/ErrorMessage'
-import MapplsMap from '@/components/MapplsMap'
+import dynamic from 'next/dynamic'
+const OSMMap = dynamic(() => import('@/components/OSMMap'), { ssr: false })
 import { getApi } from '@/lib/api'
 
 interface RideData {
@@ -153,7 +154,7 @@ export default function DriverRidePage() {
 
           {/* Map Section */}
           <div className="mb-6 h-64 w-full relative">
-            <MapplsMap
+            <OSMMap
               center={{ lat: ride.pickupLat, lng: ride.pickupLng }}
               markers={[
                 { lat: ride.pickupLat, lng: ride.pickupLng, label: 'A' },

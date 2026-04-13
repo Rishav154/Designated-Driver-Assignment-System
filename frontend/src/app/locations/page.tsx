@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { useAuth } from '@clerk/nextjs'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Plus, Pencil, Trash2, Home, Briefcase, Star } from 'lucide-react'
@@ -9,6 +10,9 @@ import Modal from '@/components/Modal'
 import AddressAutocomplete from '@/components/AddressAutocomplete'
 import { getApi } from '@/lib/api'
 import { toast } from '@/components/Toast'
+import { useCache } from '@/context/CacheContext'
+
+const OSMMap = dynamic(() => import('@/components/OSMMap'), { ssr: false })
 
 interface SavedLocation {
   id: string
@@ -32,6 +36,7 @@ const PRESET_LABELS = ['Home', 'Work', 'Custom']
 
 export default function LocationsPage() {
   const { getToken } = useAuth()
+  const { setCache, getCache } = useCache()
   const [loading, setLoading] = useState(true)
   const [locations, setLocations] = useState<SavedLocation[]>([])
   const [modalOpen, setModalOpen] = useState(false)
@@ -44,9 +49,15 @@ export default function LocationsPage() {
   const [formAddress, setFormAddress] = useState('')
   const [formLat, setFormLat] = useState('')
   const [formLng, setFormLng] = useState('')
+  const [mapCenter, setMapCenter] = useState({ lat: 28.6139, lng: 77.2090 })
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
+    const cached = getCache('/api/locations')
+    if (cached) {
+      setLocations(cached)
+      setLoading(false)
+    }
     fetchLocations()
   }, [])
 
@@ -55,6 +66,7 @@ export default function LocationsPage() {
       const api = await getApi(getToken)
       const res = await api.get('/api/locations')
       setLocations(res.data)
+      setCache('/api/locations', res.data)
     } catch {
       toast('Failed to load locations', 'error')
     } finally {
@@ -69,6 +81,7 @@ export default function LocationsPage() {
     setFormAddress('')
     setFormLat('')
     setFormLng('')
+    setMapCenter({ lat: 28.6139, lng: 77.2090 })
     setModalOpen(true)
   }
 
@@ -80,7 +93,25 @@ export default function LocationsPage() {
     setFormAddress(loc.address)
     setFormLat(loc.lat.toString())
     setFormLng(loc.lng.toString())
+    setMapCenter({ lat: loc.lat, lng: loc.lng })
     setModalOpen(true)
+  }
+
+  const handleMapInteract = async (lat: number, lng: number) => {
+    setFormLat(lat.toString())
+    setFormLng(lng.toString())
+    setMapCenter({ lat, lng })
+    
+    try {
+      const api = await getApi(getToken)
+      const res = await api.get(`/api/maps/reverse-geocode?lat=${lat}&lng=${lng}`)
+      if (res.data?.address) {
+        setFormAddress(res.data.address)
+      }
+    } catch (err) {
+      console.error('Failed to reverse geocode', err)
+      toast('Failed to get address for this location', 'error')
+    }
   }
 
   const handleSave = async () => {
@@ -96,13 +127,17 @@ export default function LocationsPage() {
         const res = await api.patch(`/api/locations/${editTarget.id}`, {
           label, address: formAddress, lat: formLat, lng: formLng
         })
-        setLocations(prev => prev.map(l => l.id === editTarget.id ? res.data : l))
+        const updated = locations.map(l => l.id === editTarget.id ? res.data : l)
+        setLocations(updated)
+        setCache('/api/locations', updated)
         toast('Location updated!', 'success')
       } else {
         const res = await api.post('/api/locations', {
           label, address: formAddress, lat: formLat, lng: formLng
         })
-        setLocations(prev => [...prev, res.data])
+        const updated = [...locations, res.data]
+        setLocations(updated)
+        setCache('/api/locations', updated)
         toast('Location saved!', 'success')
       }
       setModalOpen(false)
@@ -118,7 +153,9 @@ export default function LocationsPage() {
     try {
       const api = await getApi(getToken)
       await api.delete(`/api/locations/${id}`)
-      setLocations(prev => prev.filter(l => l.id !== id))
+      const updated = locations.filter(l => l.id !== id)
+      setLocations(updated)
+      setCache('/api/locations', updated)
       toast('Location removed', 'info')
     } catch {
       toast('Failed to delete location', 'error')
@@ -207,67 +244,88 @@ export default function LocationsPage() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         title={editTarget ? 'Edit Location' : 'Add Location'}
+        maxWidth="max-w-4xl"
       >
-        <div className="space-y-4">
-          {/* Label */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Label</label>
-            <div className="flex gap-2 flex-wrap">
-              {PRESET_LABELS.map(l => (
-                <button
-                  key={l}
-                  onClick={() => setFormLabel(l)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${formLabel === l
-                    ? 'bg-gray-900 text-white border-gray-900'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'}`}
-                >
-                  {l}
-                </button>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            {/* Label */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Label</label>
+              <div className="flex gap-2 flex-wrap">
+                {PRESET_LABELS.map(l => (
+                  <button
+                    key={l}
+                    onClick={() => setFormLabel(l)}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${formLabel === l
+                      ? 'bg-gray-900 text-white border-gray-900'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'}`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+              {formLabel === 'Custom' && (
+                <input
+                  type="text"
+                  value={customLabel}
+                  onChange={e => setCustomLabel(e.target.value)}
+                  placeholder="e.g. Gym, Parents' House…"
+                  className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
+                />
+              )}
             </div>
-            {formLabel === 'Custom' && (
-              <input
-                type="text"
-                value={customLabel}
-                onChange={e => setCustomLabel(e.target.value)}
-                placeholder="e.g. Gym, Parents' House…"
-                className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
+
+            {/* Address */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+              <AddressAutocomplete
+                placeholder="Search for a location…"
+                value={formAddress}
+                onSelect={(address, lat, lng) => {
+                  setFormAddress(address)
+                  setFormLat(lat)
+                  setFormLng(lng)
+                  if (lat && lng) {
+                    setMapCenter({ lat: parseFloat(lat), lng: parseFloat(lng) })
+                  }
+                }}
               />
-            )}
+              {formLat && formLng && (
+                <p className="text-xs text-gray-400 mt-1.5">📍 {parseFloat(formLat).toFixed(5)}, {parseFloat(formLng).toFixed(5)}</p>
+              )}
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => setModalOpen(false)}
+                className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <motion.button
+                onClick={handleSave}
+                disabled={saving}
+                whileTap={{ scale: 0.97 }}
+                className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-black disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
+              >
+                {saving ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Save'}
+              </motion.button>
+            </div>
           </div>
 
-          {/* Address */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
-            <AddressAutocomplete
-              placeholder="Search for a location…"
-              value={formAddress}
-              onSelect={(address, lat, lng) => {
-                setFormAddress(address)
-                setFormLat(lat)
-                setFormLng(lng)
-              }}
+          <div className="h-[300px] md:h-full min-h-[300px] rounded-2xl overflow-hidden border border-gray-100 shadow-inner bg-gray-50 relative">
+            <OSMMap
+              center={mapCenter}
+              zoom={15}
+              markers={formLat && formLng ? [{ lat: parseFloat(formLat), lng: parseFloat(formLng), draggable: true }] : []}
+              onMapClick={handleMapInteract}
+              onMarkerDrag={handleMapInteract}
+              className="h-full w-full"
             />
-            {formLat && formLng && (
-              <p className="text-xs text-gray-400 mt-1.5">📍 {parseFloat(formLat).toFixed(5)}, {parseFloat(formLng).toFixed(5)}</p>
-            )}
-          </div>
-
-          <div className="flex gap-2 pt-2">
-            <button
-              onClick={() => setModalOpen(false)}
-              className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <motion.button
-              onClick={handleSave}
-              disabled={saving}
-              whileTap={{ scale: 0.97 }}
-              className="flex-1 py-3 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-black disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
-            >
-              {saving ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Save'}
-            </motion.button>
+            <div className="absolute top-3 left-3 z-[400] bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-gray-100">
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Map Preview</p>
+              <p className="text-[11px] text-gray-600 font-medium">Click or drag to adjust</p>
+            </div>
           </div>
         </div>
       </Modal>

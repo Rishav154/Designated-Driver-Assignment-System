@@ -8,8 +8,10 @@ import Navbar from '@/components/Navbar'
 import ErrorMessage from '@/components/ErrorMessage'
 import LoadingScreen from '@/components/LoadingScreen'
 import AddressAutocomplete from '@/components/AddressAutocomplete'
-import MapplsMap from '@/components/MapplsMap'
+import dynamic from 'next/dynamic'
+const OSMMap = dynamic(() => import('@/components/OSMMap'), { ssr: false })
 import { getApi } from '@/lib/api'
+import { useCache } from '@/context/CacheContext'
 
 interface LocationFields {
   address: string
@@ -34,6 +36,7 @@ const locationIcon = (label: string) => {
 export default function DashboardPage() {
   const { getToken } = useAuth()
   const router = useRouter()
+  const { setCache, getCache } = useCache()
   const [checking, setChecking] = useState(true)
   const [pickup, setPickup] = useState<LocationFields>({ address: '', lat: '', lng: '' })
   const [dropoff, setDropoff] = useState<LocationFields>({ address: '', lat: '', lng: '' })
@@ -45,9 +48,16 @@ export default function DashboardPage() {
   const [savedLocations, setSavedLocations] = useState<SavedLocation[]>([])
 
   useEffect(() => {
+    const cachedAuth = getCache('/api/auth/me')
+    if (cachedAuth) {
+      if (cachedAuth.role === 'DRIVER') router.replace('/driver/dashboard')
+      else setChecking(false)
+    }
+
     getApi(getToken)
       .then((api) => api.get('/api/auth/me'))
       .then((res) => {
+        setCache('/api/auth/me', res.data)
         if (!res.data) router.replace('/onboarding')
         else if (res.data.role === 'DRIVER') router.replace('/driver/dashboard')
         else setChecking(false)
@@ -57,10 +67,18 @@ export default function DashboardPage() {
 
   // fetch saved locations for quick-select
   useEffect(() => {
+    const cachedLocs = getCache('/api/locations')
+    if (cachedLocs) {
+      setSavedLocations(cachedLocs)
+    }
+
     getApi(getToken)
       .then(api => api.get('/api/locations'))
-      .then(res => setSavedLocations(res.data ?? []))
-      .catch(() => {})
+      .then(res => {
+        setSavedLocations(res.data ?? [])
+        setCache('/api/locations', res.data ?? [])
+      })
+      .catch(() => { })
   }, [])
 
   async function estimateFare() {
@@ -176,38 +194,39 @@ export default function DashboardPage() {
                 <h2 className="font-semibold text-black">Pickup Location</h2>
               </div>
               <div className="flex flex-col gap-3">
-                <AddressAutocomplete
-                  placeholder="Search pickup location"
-                  value={pickup.address}
-                  onSelect={(address, lat, lng) => setPickup({ address, lat, lng })}
-                />
-                {/* Saved location chips for pickup */}
-                {savedLocations.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {savedLocations.map(loc => (
-                      <button
-                        key={loc.id}
-                        onClick={() => setPickup({ address: loc.address, lat: loc.lat.toString(), lng: loc.lng.toString() })}
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                          pickup.address === loc.address
+                <div className="min-h-[120px] flex flex-col gap-3">
+                  <AddressAutocomplete
+                    placeholder="Search pickup location"
+                    value={pickup.address}
+                    onSelect={(address, lat, lng) => setPickup({ address, lat, lng })}
+                  />
+                  {/* Saved location chips for pickup */}
+                  {savedLocations.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {savedLocations.map(loc => (
+                        <button
+                          key={loc.id}
+                          onClick={() => setPickup({ address: loc.address, lat: loc.lat.toString(), lng: loc.lng.toString() })}
+                          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${pickup.address === loc.address
                             ? 'bg-gray-900 text-white border-gray-900'
                             : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-400'
-                        }`}
-                      >
-                        {locationIcon(loc.label)}
-                        {loc.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <button
-                  onClick={handleUseCurrentLocation}
-                  disabled={locating}
-                  className="flex items-center gap-2 text-sm text-green-600 font-medium hover:text-green-700 disabled:opacity-50 mt-1"
-                >
-                  {locating ? <span className="w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full animate-spin" /> : <span>📍 Use my current location</span>}
-                </button>
-                <MapplsMap
+                            }`}
+                        >
+                          {locationIcon(loc.label)}
+                          {loc.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={handleUseCurrentLocation}
+                    disabled={locating}
+                    className="flex items-center gap-2 text-sm text-green-600 font-medium hover:text-green-700 disabled:opacity-50 mt-1"
+                  >
+                    {locating ? <span className="w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full animate-spin" /> : <span>📍 Use my current location</span>}
+                  </button>
+                </div>
+                <OSMMap
                   center={
                     pickup.lat && pickup.lng
                       ? { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lng) }
@@ -251,31 +270,32 @@ export default function DashboardPage() {
                 <h2 className="font-semibold text-black">Dropoff Location</h2>
               </div>
               <div className="flex flex-col gap-3">
-                <AddressAutocomplete
-                  placeholder="Search dropoff location"
-                  value={dropoff.address}
-                  onSelect={(address, lat, lng) => setDropoff({ address, lat, lng })}
-                />
-                {/* Saved location chips for dropoff */}
-                {savedLocations.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {savedLocations.map(loc => (
-                      <button
-                        key={loc.id}
-                        onClick={() => setDropoff({ address: loc.address, lat: loc.lat.toString(), lng: loc.lng.toString() })}
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                          dropoff.address === loc.address
+                <div className="min-h-[120px] flex flex-col gap-3">
+                  <AddressAutocomplete
+                    placeholder="Search dropoff location"
+                    value={dropoff.address}
+                    onSelect={(address, lat, lng) => setDropoff({ address, lat, lng })}
+                  />
+                  {/* Saved location chips for dropoff */}
+                  {savedLocations.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {savedLocations.map(loc => (
+                        <button
+                          key={loc.id}
+                          onClick={() => setDropoff({ address: loc.address, lat: loc.lat.toString(), lng: loc.lng.toString() })}
+                          className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${dropoff.address === loc.address
                             ? 'bg-gray-900 text-white border-gray-900'
                             : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-400'
-                        }`}
-                      >
-                        {locationIcon(loc.label)}
-                        {loc.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <MapplsMap
+                            }`}
+                        >
+                          {locationIcon(loc.label)}
+                          {loc.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <OSMMap
                   center={
                     dropoff.lat && dropoff.lng
                       ? { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lng) }

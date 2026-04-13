@@ -6,7 +6,8 @@ import { motion } from 'framer-motion'
 import { Phone } from 'lucide-react'
 import { io } from 'socket.io-client'
 import Navbar from '@/components/Navbar'
-import MapplsMap from '@/components/MapplsMap'
+import dynamic from 'next/dynamic'
+const OSMMap = dynamic(() => import('@/components/OSMMap'), { ssr: false })
 import { getApi } from '@/lib/api'
 
 interface RideData {
@@ -76,7 +77,7 @@ export default function ActiveRidePage() {
 
           {/* Map Section */}
           <div className="mb-6 h-72 w-full">
-            <MapplsMap
+            <OSMMap
               center={{ lat: ride.pickupLat, lng: ride.pickupLng }}
               markers={[
                 { lat: ride.pickupLat, lng: ride.pickupLng, label: 'A' },

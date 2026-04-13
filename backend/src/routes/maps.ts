@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { requireAuth } from '../middleware/requireAuth.ts'
-import { getMapplsToken, isOAuthToken } from '../utils/mapplsToken.ts'
 
 const router = Router()
 
@@ -8,7 +7,7 @@ const NOMINATIM_BASE = 'https://nominatim.openstreetmap.org'
 const NOMINATIM_HEADERS = { 'User-Agent': 'SafeRide-DesignatedDriver/1.0' }
 
 // GET /api/maps/autosuggest?query=<text>&lat=<lat>&lng=<lng>
-// Still uses Mappls for autosuggest (works fine on standard plan)
+// Uses Nominatim search for address suggestions (replaces Mappls autosuggest)
 router.get('/autosuggest', requireAuth, async (req, res) => {
     const { query, lat, lng } = req.query
 
@@ -17,47 +16,54 @@ router.get('/autosuggest', requireAuth, async (req, res) => {
     }
 
     try {
-        const token = await getMapplsToken()
+        const params = new URLSearchParams({
+            q: query as string,
+            format: 'json',
+            addressdetails: '1',
+            limit: '5',
+            countrycodes: 'in',
+        })
 
-        let url: string
-        let headers: Record<string, string> = {}
-
-        if (isOAuthToken(token)) {
-            const params = new URLSearchParams({
-                query: query as string,
-                region: 'IND',
-            })
-            if (lat && lng) {
-                params.set('location', `${lat},${lng}`)
-            }
-            url = `https://atlas.mappls.com/api/places/search/json?${params.toString()}`
-            headers['Authorization'] = `Bearer ${token}`
-        } else {
-            url = `https://atlas.mappls.com/api/places/search/json?query=${encodeURIComponent(query as string)}&region=IND&access_token=${token}`
-            if (lat && lng) {
-                url += `&location=${lat},${lng}`
-            }
+        // If user location is available, bias results toward it
+        if (lat && lng) {
+            params.set('viewbox', `${Number(lng) - 0.5},${Number(lat) + 0.5},${Number(lng) + 0.5},${Number(lat) - 0.5}`)
+            params.set('bounded', '0')
         }
 
-        console.log('Fetching Mappls autosuggest:', url.replace(token, '***'))
+        const url = `${NOMINATIM_BASE}/search?${params.toString()}`
+        console.log('Fetching Nominatim autosuggest:', url)
 
         const controller = new AbortController()
         const timeout = setTimeout(() => controller.abort(), 10000)
 
         const response = await fetch(url, {
-            headers,
+            headers: NOMINATIM_HEADERS,
             signal: controller.signal,
         })
         clearTimeout(timeout)
 
         if (!response.ok) {
             const errText = await response.text()
-            console.error('Mappls autosuggest error:', response.status, errText)
-            return res.status(response.status).json({ error: 'Mappls API error', details: errText })
+            console.error('Nominatim autosuggest error:', response.status, errText)
+            return res.status(response.status).json({ error: 'Geocoding API error', details: errText })
         }
 
         const data = await response.json()
-        res.json(data.suggestedLocations || [])
+
+        // Transform Nominatim results to match the shape the frontend expects
+        const suggestions = data.map((item: any) => {
+            const addressParts = item.address || {}
+            const placeName = item.name || addressParts.road || addressParts.neighbourhood || item.display_name.split(',')[0]
+            return {
+                eLoc: item.place_id?.toString() || '',
+                placeName: placeName,
+                placeAddress: item.display_name,
+                latitude: parseFloat(item.lat),
+                longitude: parseFloat(item.lon),
+            }
+        })
+
+        res.json(suggestions)
     } catch (error: any) {
         console.error('Autosuggest fetch error:', error.message)
         res.status(500).json({ error: 'Failed to fetch suggestions' })
@@ -234,9 +240,8 @@ router.get('/geocode', requireAuth, async (req, res) => {
     }
 })
 
-// GET /api/maps/place?eloc=<eloc>
-// Legacy endpoint — now uses Nominatim forward geocoding via the place name
-// Kept for backward compatibility; frontend will gradually switch to /geocode
+// GET /api/maps/place?eloc=<eloc>&placeName=<name>
+// Uses Nominatim forward geocoding via the place name
 router.get('/place', requireAuth, async (req, res) => {
     let { eloc, placeName } = req.query
 
@@ -244,7 +249,6 @@ router.get('/place', requireAuth, async (req, res) => {
         return res.status(400).json({ error: 'Missing eloc or placeName parameter' })
     }
 
-    // If we have a placeName, use Nominatim directly
     const searchQuery = (placeName as string) || (eloc as string)
 
     try {
