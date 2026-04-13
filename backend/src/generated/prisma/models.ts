@@ -9,6 +9,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.ts'
+export type * from './models/SavedLocation.ts'
+export type * from './models/Notification.ts'
 export type * from './models/DriverProfile.ts'
 export type * from './models/Ride.ts'
 export type * from './models/Payment.ts'

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { getAuth } from '@clerk/express'
 import { prisma } from '../lib/prisma.ts'
 import { requireAuth } from '../middleware/requireAuth.ts'
+import { mapplsDistance } from '../utils/mapplsDistance.ts'
 
 const router = Router()
 
@@ -23,9 +24,16 @@ const RATE_PER_KM = 15
 // POST /api/rides/estimate
 router.post('/estimate', requireAuth, async (req, res) => {
     const { pickupLat, pickupLng, dropoffLat, dropoffLng } = req.body
-    const distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
-    const fare = BASE_FARE + distance * RATE_PER_KM
-    res.json({ distance: distance.toFixed(2), fare: Math.round(fare) })
+    try {
+        const { distanceKm, durationSeconds } = await mapplsDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
+        const fare = BASE_FARE + distanceKm * RATE_PER_KM
+        res.json({ distance: distanceKm.toFixed(2), fare: Math.round(fare), durationSeconds })
+    } catch (error) {
+        // Fallback to Haversine
+        const distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
+        const fare = BASE_FARE + distance * RATE_PER_KM
+        res.json({ distance: distance.toFixed(2), fare: Math.round(fare), fallback: true })
+    }
 })
 
 // POST /api/rides/book
@@ -37,19 +45,73 @@ router.post('/book', requireAuth, async (req, res) => {
     const { pickupAddress, dropoffAddress,
         pickupLat, pickupLng, dropoffLat, dropoffLng } = req.body
 
-    const distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
+    let distance = 0
+    let durationSeconds = null
+    try {
+        const mapplsRes = await mapplsDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
+        distance = mapplsRes.distanceKm
+        durationSeconds = mapplsRes.durationSeconds
+    } catch (error) {
+        distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
+    }
+
     const fareEstimate = Math.round(BASE_FARE + distance * RATE_PER_KM)
 
+    const rideData: any = {
+        customerId: customer.id,
+        pickupAddress, dropoffAddress,
+        pickupLat, pickupLng,
+        dropoffLat, dropoffLng,
+        fareEstimate
+    }
+    if (durationSeconds !== null) {
+        rideData.durationSeconds = durationSeconds
+    }
+
     const ride = await prisma.ride.create({
-        data: {
-            customerId: customer.id,
-            pickupAddress, dropoffAddress,
-            pickupLat, pickupLng,
-            dropoffLat, dropoffLng,
-            fareEstimate
-        }
+        data: rideData
     })
     res.json(ride)
+})
+
+// GET /api/rides/history  — paginated trip history with full details
+router.get('/history', requireAuth, async (req, res) => {
+    const { userId } = getAuth(req)
+    const user = await prisma.user.findUnique({ where: { clerkId: userId! } })
+    if (!user) return res.status(404).json({ error: 'User not found' })
+
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+    const skip = (page - 1) * limit
+
+    const [rides, total] = await Promise.all([
+        prisma.ride.findMany({
+            where: user.role === 'DRIVER'
+                ? { driverId: user.id }
+                : { customerId: user.id },
+            orderBy: { createdAt: 'desc' },
+            skip,
+            take: limit,
+            include: {
+                customer: { select: { id: true, name: true, phone: true, profilePicture: true } },
+                driver: {
+                    select: {
+                        id: true, name: true, phone: true, profilePicture: true,
+                        driverProfile: { select: { vehicleMake: true, vehicleModel: true, vehiclePlate: true, rating: true } }
+                    }
+                },
+                payment: true,
+                ratings: true
+            }
+        }),
+        prisma.ride.count({
+            where: user.role === 'DRIVER'
+                ? { driverId: user.id }
+                : { customerId: user.id }
+        })
+    ])
+
+    res.json({ rides, total, page, limit, pages: Math.ceil(total / limit) })
 })
 
 // GET /api/rides/:id
@@ -57,14 +119,16 @@ router.get('/:id', requireAuth, async (req, res) => {
     const ride = await prisma.ride.findUnique({
         where: { id: req.params.id as string },
         include: {
-            customer: { select: { id: true, name: true, phone: true } },
+            customer: { select: { id: true, name: true, phone: true, profilePicture: true } },
             driver: {
                 select: {
                     id: true,
-                    name: true, phone: true,
-                    driverProfile: { select: { vehicleMake: true, vehicleModel: true, vehiclePlate: true } }
+                    name: true, phone: true, profilePicture: true,
+                    driverProfile: { select: { vehicleMake: true, vehicleModel: true, vehiclePlate: true, rating: true } }
                 }
-            }
+            },
+            payment: true,
+            ratings: true
         }
     })
     if (!ride) return res.status(404).json({ error: 'Ride not found' })
@@ -90,6 +154,16 @@ router.post('/:id/accept', requireAuth, async (req, res) => {
         }
     })
 
+    // create in-app notification for customer
+    await prisma.notification.create({
+        data: {
+            userId: ride.customerId,
+            type: 'DRIVER_ASSIGNED',
+            message: `Your driver ${driver.name} has been assigned and is on the way!`,
+            rideId: ride.id
+        }
+    })
+
     // notify customer via socket
     req.app.get('io').to(`ride:${ride.id}`).emit('status:update', {
         status: 'DRIVER_ASSIGNED',
@@ -104,6 +178,16 @@ router.post('/:id/start', requireAuth, async (req, res) => {
     const ride = await prisma.ride.update({
         where: { id: req.params.id as string },
         data: { status: 'IN_PROGRESS' }
+    })
+
+    // create in-app notification for customer
+    await prisma.notification.create({
+        data: {
+            userId: ride.customerId,
+            type: 'TRIP_STARTED',
+            message: 'Your trip has started. Sit back and enjoy the ride!',
+            rideId: ride.id
+        }
     })
 
     req.app.get('io').to(`ride:${ride.id}`).emit('status:update', { status: 'IN_PROGRESS' })
@@ -124,9 +208,20 @@ router.post('/:id/complete', requireAuth, async (req, res) => {
         }
     })
 
+    // create in-app notification for customer
+    await prisma.notification.create({
+        data: {
+            userId: ride.customerId,
+            type: 'TRIP_COMPLETED',
+            message: `Trip completed! Your fare was ₹${ride.fareEstimate}. Thank you for riding with SafeRide.`,
+            rideId: ride.id
+        }
+    })
+
     req.app.get('io').to(`ride:${ride.id}`).emit('status:update', { status: 'COMPLETED' })
     res.json(updated)
 })
+
 
 // GET /api/rides  (get all rides for current user)
 router.get('/', requireAuth, async (req, res) => {

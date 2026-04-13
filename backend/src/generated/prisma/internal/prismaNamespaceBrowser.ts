@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  SavedLocation: 'SavedLocation',
+  Notification: 'Notification',
   DriverProfile: 'DriverProfile',
   Ride: 'Ride',
   Payment: 'Payment',
@@ -80,11 +82,38 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phone: 'phone',
+  profilePicture: 'profilePicture',
   role: 'role',
   createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SavedLocationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  label: 'label',
+  address: 'address',
+  lat: 'lat',
+  lng: 'lng',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedLocationScalarFieldEnum = (typeof SavedLocationScalarFieldEnum)[keyof typeof SavedLocationScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  message: 'message',
+  read: 'read',
+  rideId: 'rideId',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const DriverProfileScalarFieldEnum = {
@@ -114,6 +143,7 @@ export const RideScalarFieldEnum = {
   status: 'status',
   fareEstimate: 'fareEstimate',
   fareFinal: 'fareFinal',
+  durationSeconds: 'durationSeconds',
   createdAt: 'createdAt',
   completedAt: 'completedAt'
 } as const

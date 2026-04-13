@@ -34,3 +34,13 @@ export const PaymentStatus = {
 } as const
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const NotificationType = {
+  DRIVER_ASSIGNED: 'DRIVER_ASSIGNED',
+  TRIP_STARTED: 'TRIP_STARTED',
+  TRIP_COMPLETED: 'TRIP_COMPLETED',
+  TRIP_CANCELLED: 'TRIP_CANCELLED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

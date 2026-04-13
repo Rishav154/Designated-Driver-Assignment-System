@@ -4,22 +4,47 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
 
 model User {
-  id              String         @id @default(uuid())
-  clerkId         String         @unique
+  id              String          @id @default(uuid())
+  clerkId         String          @unique
   name            String
-  email           String         @unique
+  email           String          @unique
   phone           String?
-  role            Role           @default(CUSTOMER)
-  createdAt       DateTime       @default(now())
+  profilePicture  String?
+  role            Role            @default(CUSTOMER)
+  createdAt       DateTime        @default(now())
   driverProfile   DriverProfile?
-  ridesAsCustomer Ride[]         @relation("CustomerRides")
-  ridesAsDriver   Ride[]         @relation("DriverRides")
-  ratingsGiven    Rating[]       @relation("RatingsGiven")
-  ratingsReceived Rating[]       @relation("RatingsReceived")
+  ridesAsCustomer Ride[]          @relation("CustomerRides")
+  ridesAsDriver   Ride[]          @relation("DriverRides")
+  ratingsGiven    Rating[]        @relation("RatingsGiven")
+  ratingsReceived Rating[]        @relation("RatingsReceived")
+  savedLocations  SavedLocation[]
+  notifications   Notification[]
+}
+
+model SavedLocation {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  label     String
+  address   String
+  lat       Float
+  lng       Float
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  type      NotificationType
+  message   String
+  read      Boolean          @default(false)
+  rideId    String?
+  createdAt DateTime         @default(now())
 }
 
 model DriverProfile {
@@ -49,6 +74,7 @@ model Ride {
   status         RideStatus @default(SEARCHING)
   fareEstimate   Float
   fareFinal      Float?
+  durationSeconds Int?
   createdAt      DateTime   @default(now())
   completedAt    DateTime?
   payment        Payment?
@@ -92,4 +118,11 @@ enum RideStatus {
 enum PaymentStatus {
   PENDING
   PAID
+}
+
+enum NotificationType {
+  DRIVER_ASSIGNED
+  TRIP_STARTED
+  TRIP_COMPLETED
+  TRIP_CANCELLED
 }

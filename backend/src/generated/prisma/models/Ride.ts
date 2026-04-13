@@ -33,6 +33,7 @@ export type RideAvgAggregateOutputType = {
   dropoffLng: number | null
   fareEstimate: number | null
   fareFinal: number | null
+  durationSeconds: number | null
 }
 
 export type RideSumAggregateOutputType = {
@@ -42,6 +43,7 @@ export type RideSumAggregateOutputType = {
   dropoffLng: number | null
   fareEstimate: number | null
   fareFinal: number | null
+  durationSeconds: number | null
 }
 
 export type RideMinAggregateOutputType = {
@@ -57,6 +59,7 @@ export type RideMinAggregateOutputType = {
   status: $Enums.RideStatus | null
   fareEstimate: number | null
   fareFinal: number | null
+  durationSeconds: number | null
   createdAt: Date | null
   completedAt: Date | null
 }
@@ -74,6 +77,7 @@ export type RideMaxAggregateOutputType = {
   status: $Enums.RideStatus | null
   fareEstimate: number | null
   fareFinal: number | null
+  durationSeconds: number | null
   createdAt: Date | null
   completedAt: Date | null
 }
@@ -91,6 +95,7 @@ export type RideCountAggregateOutputType = {
   status: number
   fareEstimate: number
   fareFinal: number
+  durationSeconds: number
   createdAt: number
   completedAt: number
   _all: number
@@ -104,6 +109,7 @@ export type RideAvgAggregateInputType = {
   dropoffLng?: true
   fareEstimate?: true
   fareFinal?: true
+  durationSeconds?: true
 }
 
 export type RideSumAggregateInputType = {
@@ -113,6 +119,7 @@ export type RideSumAggregateInputType = {
   dropoffLng?: true
   fareEstimate?: true
   fareFinal?: true
+  durationSeconds?: true
 }
 
 export type RideMinAggregateInputType = {
@@ -128,6 +135,7 @@ export type RideMinAggregateInputType = {
   status?: true
   fareEstimate?: true
   fareFinal?: true
+  durationSeconds?: true
   createdAt?: true
   completedAt?: true
 }
@@ -145,6 +153,7 @@ export type RideMaxAggregateInputType = {
   status?: true
   fareEstimate?: true
   fareFinal?: true
+  durationSeconds?: true
   createdAt?: true
   completedAt?: true
 }
@@ -162,6 +171,7 @@ export type RideCountAggregateInputType = {
   status?: true
   fareEstimate?: true
   fareFinal?: true
+  durationSeconds?: true
   createdAt?: true
   completedAt?: true
   _all?: true
@@ -266,6 +276,7 @@ export type RideGroupByOutputType = {
   status: $Enums.RideStatus
   fareEstimate: number
   fareFinal: number | null
+  durationSeconds: number | null
   createdAt: Date
   completedAt: Date | null
   _count: RideCountAggregateOutputType | null
@@ -306,6 +317,7 @@ export type RideWhereInput = {
   status?: Prisma.EnumRideStatusFilter<"Ride"> | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFilter<"Ride"> | number
   fareFinal?: Prisma.FloatNullableFilter<"Ride"> | number | null
+  durationSeconds?: Prisma.IntNullableFilter<"Ride"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Ride"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Ride"> | Date | string | null
   customer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -327,6 +339,7 @@ export type RideOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   customer?: Prisma.UserOrderByWithRelationInput
@@ -351,6 +364,7 @@ export type RideWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumRideStatusFilter<"Ride"> | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFilter<"Ride"> | number
   fareFinal?: Prisma.FloatNullableFilter<"Ride"> | number | null
+  durationSeconds?: Prisma.IntNullableFilter<"Ride"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Ride"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Ride"> | Date | string | null
   customer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -372,6 +386,7 @@ export type RideOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.RideCountOrderByAggregateInput
@@ -397,6 +412,7 @@ export type RideScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumRideStatusWithAggregatesFilter<"Ride"> | $Enums.RideStatus
   fareEstimate?: Prisma.FloatWithAggregatesFilter<"Ride"> | number
   fareFinal?: Prisma.FloatNullableWithAggregatesFilter<"Ride"> | number | null
+  durationSeconds?: Prisma.IntNullableWithAggregatesFilter<"Ride"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ride"> | Date | string
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ride"> | Date | string | null
 }
@@ -412,6 +428,7 @@ export type RideCreateInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   customer: Prisma.UserCreateNestedOneWithoutRidesAsCustomerInput
@@ -433,6 +450,7 @@ export type RideUncheckedCreateInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutRideInput
@@ -450,6 +468,7 @@ export type RideUpdateInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   customer?: Prisma.UserUpdateOneRequiredWithoutRidesAsCustomerNestedInput
@@ -471,6 +490,7 @@ export type RideUncheckedUpdateInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutRideNestedInput
@@ -490,6 +510,7 @@ export type RideCreateManyInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -505,6 +526,7 @@ export type RideUpdateManyMutationInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -522,6 +544,7 @@ export type RideUncheckedUpdateManyInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -549,6 +572,7 @@ export type RideCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
 }
@@ -560,6 +584,7 @@ export type RideAvgOrderByAggregateInput = {
   dropoffLng?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
 export type RideMaxOrderByAggregateInput = {
@@ -575,6 +600,7 @@ export type RideMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
 }
@@ -592,6 +618,7 @@ export type RideMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
 }
@@ -603,6 +630,7 @@ export type RideSumOrderByAggregateInput = {
   dropoffLng?: Prisma.SortOrder
   fareEstimate?: Prisma.SortOrder
   fareFinal?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
 export type RideScalarRelationFilter = {
@@ -706,6 +734,14 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
@@ -749,6 +785,7 @@ export type RideCreateWithoutCustomerInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   driver?: Prisma.UserCreateNestedOneWithoutRidesAsDriverInput
@@ -768,6 +805,7 @@ export type RideUncheckedCreateWithoutCustomerInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutRideInput
@@ -795,6 +833,7 @@ export type RideCreateWithoutDriverInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   customer: Prisma.UserCreateNestedOneWithoutRidesAsCustomerInput
@@ -814,6 +853,7 @@ export type RideUncheckedCreateWithoutDriverInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutRideInput
@@ -862,6 +902,7 @@ export type RideScalarWhereInput = {
   status?: Prisma.EnumRideStatusFilter<"Ride"> | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFilter<"Ride"> | number
   fareFinal?: Prisma.FloatNullableFilter<"Ride"> | number | null
+  durationSeconds?: Prisma.IntNullableFilter<"Ride"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Ride"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"Ride"> | Date | string | null
 }
@@ -893,6 +934,7 @@ export type RideCreateWithoutPaymentInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   customer: Prisma.UserCreateNestedOneWithoutRidesAsCustomerInput
@@ -913,6 +955,7 @@ export type RideUncheckedCreateWithoutPaymentInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   ratings?: Prisma.RatingUncheckedCreateNestedManyWithoutRideInput
@@ -945,6 +988,7 @@ export type RideUpdateWithoutPaymentInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   customer?: Prisma.UserUpdateOneRequiredWithoutRidesAsCustomerNestedInput
@@ -965,6 +1009,7 @@ export type RideUncheckedUpdateWithoutPaymentInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   ratings?: Prisma.RatingUncheckedUpdateManyWithoutRideNestedInput
@@ -981,6 +1026,7 @@ export type RideCreateWithoutRatingsInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   customer: Prisma.UserCreateNestedOneWithoutRidesAsCustomerInput
@@ -1001,6 +1047,7 @@ export type RideUncheckedCreateWithoutRatingsInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutRideInput
@@ -1033,6 +1080,7 @@ export type RideUpdateWithoutRatingsInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   customer?: Prisma.UserUpdateOneRequiredWithoutRidesAsCustomerNestedInput
@@ -1053,6 +1101,7 @@ export type RideUncheckedUpdateWithoutRatingsInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutRideNestedInput
@@ -1070,6 +1119,7 @@ export type RideCreateManyCustomerInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -1086,6 +1136,7 @@ export type RideCreateManyDriverInput = {
   status?: $Enums.RideStatus
   fareEstimate: number
   fareFinal?: number | null
+  durationSeconds?: number | null
   createdAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -1101,6 +1152,7 @@ export type RideUpdateWithoutCustomerInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   driver?: Prisma.UserUpdateOneWithoutRidesAsDriverNestedInput
@@ -1120,6 +1172,7 @@ export type RideUncheckedUpdateWithoutCustomerInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutRideNestedInput
@@ -1138,6 +1191,7 @@ export type RideUncheckedUpdateManyWithoutCustomerInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -1153,6 +1207,7 @@ export type RideUpdateWithoutDriverInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   customer?: Prisma.UserUpdateOneRequiredWithoutRidesAsCustomerNestedInput
@@ -1172,6 +1227,7 @@ export type RideUncheckedUpdateWithoutDriverInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutRideNestedInput
@@ -1190,6 +1246,7 @@ export type RideUncheckedUpdateManyWithoutDriverInput = {
   status?: Prisma.EnumRideStatusFieldUpdateOperationsInput | $Enums.RideStatus
   fareEstimate?: Prisma.FloatFieldUpdateOperationsInput | number
   fareFinal?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -1238,6 +1295,7 @@ export type RideSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean
   fareEstimate?: boolean
   fareFinal?: boolean
+  durationSeconds?: boolean
   createdAt?: boolean
   completedAt?: boolean
   customer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1260,6 +1318,7 @@ export type RideSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   fareEstimate?: boolean
   fareFinal?: boolean
+  durationSeconds?: boolean
   createdAt?: boolean
   completedAt?: boolean
   customer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1279,6 +1338,7 @@ export type RideSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   fareEstimate?: boolean
   fareFinal?: boolean
+  durationSeconds?: boolean
   createdAt?: boolean
   completedAt?: boolean
   customer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1298,11 +1358,12 @@ export type RideSelectScalar = {
   status?: boolean
   fareEstimate?: boolean
   fareFinal?: boolean
+  durationSeconds?: boolean
   createdAt?: boolean
   completedAt?: boolean
 }
 
-export type RideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerId" | "driverId" | "pickupAddress" | "dropoffAddress" | "pickupLat" | "pickupLng" | "dropoffLat" | "dropoffLng" | "status" | "fareEstimate" | "fareFinal" | "createdAt" | "completedAt", ExtArgs["result"]["ride"]>
+export type RideOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "customerId" | "driverId" | "pickupAddress" | "dropoffAddress" | "pickupLat" | "pickupLng" | "dropoffLat" | "dropoffLng" | "status" | "fareEstimate" | "fareFinal" | "durationSeconds" | "createdAt" | "completedAt", ExtArgs["result"]["ride"]>
 export type RideInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   customer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   driver?: boolean | Prisma.Ride$driverArgs<ExtArgs>
@@ -1340,6 +1401,7 @@ export type $RidePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     status: $Enums.RideStatus
     fareEstimate: number
     fareFinal: number | null
+    durationSeconds: number | null
     createdAt: Date
     completedAt: Date | null
   }, ExtArgs["result"]["ride"]>
@@ -1781,6 +1843,7 @@ export interface RideFieldRefs {
   readonly status: Prisma.FieldRef<"Ride", 'RideStatus'>
   readonly fareEstimate: Prisma.FieldRef<"Ride", 'Float'>
   readonly fareFinal: Prisma.FieldRef<"Ride", 'Float'>
+  readonly durationSeconds: Prisma.FieldRef<"Ride", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Ride", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"Ride", 'DateTime'>
 }

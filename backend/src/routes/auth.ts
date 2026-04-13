@@ -10,12 +10,31 @@ router.post('/sync', requireAuth, async (req, res) => {
     const { userId } = getAuth(req)
     const { name, email, phone, role } = req.body
 
-    const user = await prisma.user.upsert({
-        where: { clerkId: userId! },
-        update: {},
-        create: { clerkId: userId!, name, email, phone, role }
-    })
-    res.json(user)
+    if (!name || !email) {
+        return res.status(400).json({ error: 'Name and Email are required' })
+    }
+
+    try {
+        // Handle case where user exists with same email but different clerkId
+        const existingByEmail = await prisma.user.findUnique({ where: { email } })
+        if (existingByEmail && existingByEmail.clerkId !== userId) {
+            const updated = await prisma.user.update({
+                where: { id: existingByEmail.id },
+                data: { clerkId: userId!, name, phone, role }
+            })
+            return res.json(updated)
+        }
+
+        const user = await prisma.user.upsert({
+            where: { clerkId: userId! },
+            update: { name, email, phone, role },
+            create: { clerkId: userId!, name, email, phone, role }
+        })
+        res.json(user)
+    } catch (err: any) {
+        console.error('Sync error:', err)
+        res.status(500).json({ error: err.message })
+    }
 })
 
 // Save driver vehicle details
@@ -40,6 +59,35 @@ router.get('/me', requireAuth, async (req, res) => {
         include: { driverProfile: true }
     })
     res.json(user)
+})
+
+// Update user profile (name, phone, profilePicture)
+router.patch('/profile', requireAuth, async (req, res) => {
+    const { userId } = getAuth(req)
+    const { name, phone, profilePicture } = req.body
+
+    if (name !== undefined && (!name || name.trim().length < 2)) {
+        return res.status(400).json({ error: 'Name must be at least 2 characters' })
+    }
+
+    if (phone !== undefined && phone && !/^\+?[\d\s\-().]{7,20}$/.test(phone)) {
+        return res.status(400).json({ error: 'Invalid phone number format' })
+    }
+
+    try {
+        const updated = await prisma.user.update({
+            where: { clerkId: userId! },
+            data: {
+                ...(name !== undefined && { name: name.trim() }),
+                ...(phone !== undefined && { phone }),
+                ...(profilePicture !== undefined && { profilePicture }),
+            }
+        })
+        res.json(updated)
+    } catch (err: any) {
+        console.error('Profile update error:', err)
+        res.status(500).json({ error: err.message })
+    }
 })
 
 export default router

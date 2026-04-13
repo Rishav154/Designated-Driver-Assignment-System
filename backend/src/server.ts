@@ -7,8 +7,11 @@ import authRoutes from './routes/auth.ts'
 import rideRoutes from './routes/rides.ts'
 import driverRoutes from './routes/drivers.ts'
 import paymentRoutes from './routes/payments.ts'
+import mapsRoutes from './routes/maps.ts'
 import { clerkMiddleware } from '@clerk/express'
 import ratingsRoutes from './routes/ratings.ts'
+import locationsRoutes from './routes/locations.ts'
+import notificationsRoutes from './routes/notifications.ts'
 import { requireAuth } from './middleware/requireAuth.ts'
 dotenv.config()
 
@@ -19,18 +22,21 @@ const io = new Server(httpServer, {
 })
 
 app.use(cors({ origin: 'http://localhost:3000' }))
-app.use(express.json())
+app.use(express.json({ limit: '10mb' })) // larger limit for base64 profile pictures
 app.use(clerkMiddleware())
 
 // make io accessible in routes
 app.set('io', io)
 
-// Routes (we'll fill these in next phases)
+// Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/rides', requireAuth, rideRoutes)
 app.use('/api/drivers', requireAuth, driverRoutes)
 app.use('/api/payments', requireAuth, paymentRoutes)
 app.use('/api/ratings', requireAuth, ratingsRoutes)
+app.use('/api/maps', requireAuth, mapsRoutes)
+app.use('/api/locations', requireAuth, locationsRoutes)
+app.use('/api/notifications', requireAuth, notificationsRoutes)
 
 
 // Socket.io events

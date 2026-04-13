@@ -30,6 +30,7 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   phone: string | null
+  profilePicture: string | null
   role: $Enums.Role | null
   createdAt: Date | null
 }
@@ -40,6 +41,7 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   phone: string | null
+  profilePicture: string | null
   role: $Enums.Role | null
   createdAt: Date | null
 }
@@ -50,6 +52,7 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   phone: number
+  profilePicture: number
   role: number
   createdAt: number
   _all: number
@@ -62,6 +65,7 @@ export type UserMinAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  profilePicture?: true
   role?: true
   createdAt?: true
 }
@@ -72,6 +76,7 @@ export type UserMaxAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  profilePicture?: true
   role?: true
   createdAt?: true
 }
@@ -82,6 +87,7 @@ export type UserCountAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  profilePicture?: true
   role?: true
   createdAt?: true
   _all?: true
@@ -165,6 +171,7 @@ export type UserGroupByOutputType = {
   name: string
   email: string
   phone: string | null
+  profilePicture: string | null
   role: $Enums.Role
   createdAt: Date
   _count: UserCountAggregateOutputType | null
@@ -196,6 +203,7 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   phone?: Prisma.StringNullableFilter<"User"> | string | null
+  profilePicture?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   driverProfile?: Prisma.XOR<Prisma.DriverProfileNullableScalarRelationFilter, Prisma.DriverProfileWhereInput> | null
@@ -203,6 +211,8 @@ export type UserWhereInput = {
   ridesAsDriver?: Prisma.RideListRelationFilter
   ratingsGiven?: Prisma.RatingListRelationFilter
   ratingsReceived?: Prisma.RatingListRelationFilter
+  savedLocations?: Prisma.SavedLocationListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -211,6 +221,7 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  profilePicture?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   driverProfile?: Prisma.DriverProfileOrderByWithRelationInput
@@ -218,6 +229,8 @@ export type UserOrderByWithRelationInput = {
   ridesAsDriver?: Prisma.RideOrderByRelationAggregateInput
   ratingsGiven?: Prisma.RatingOrderByRelationAggregateInput
   ratingsReceived?: Prisma.RatingOrderByRelationAggregateInput
+  savedLocations?: Prisma.SavedLocationOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -229,6 +242,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   phone?: Prisma.StringNullableFilter<"User"> | string | null
+  profilePicture?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   driverProfile?: Prisma.XOR<Prisma.DriverProfileNullableScalarRelationFilter, Prisma.DriverProfileWhereInput> | null
@@ -236,6 +250,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   ridesAsDriver?: Prisma.RideListRelationFilter
   ratingsGiven?: Prisma.RatingListRelationFilter
   ratingsReceived?: Prisma.RatingListRelationFilter
+  savedLocations?: Prisma.SavedLocationListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "clerkId" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -244,6 +260,7 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  profilePicture?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -260,6 +277,7 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  profilePicture?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -270,6 +288,7 @@ export type UserCreateInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
@@ -277,6 +296,8 @@ export type UserCreateInput = {
   ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -285,6 +306,7 @@ export type UserUncheckedCreateInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
@@ -292,6 +314,8 @@ export type UserUncheckedCreateInput = {
   ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -300,6 +324,7 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
@@ -307,6 +332,8 @@ export type UserUpdateInput = {
   ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -315,6 +342,7 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -322,6 +350,8 @@ export type UserUncheckedUpdateInput = {
   ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -330,6 +360,7 @@ export type UserCreateManyInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
 }
@@ -340,6 +371,7 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -350,6 +382,7 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -360,6 +393,7 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  profilePicture?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -370,6 +404,7 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  profilePicture?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -380,6 +415,7 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  profilePicture?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -408,6 +444,34 @@ export type EnumRoleFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutSavedLocationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedLocationsInput, Prisma.UserUncheckedCreateWithoutSavedLocationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedLocationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedLocationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedLocationsInput, Prisma.UserUncheckedCreateWithoutSavedLocationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedLocationsInput
+  upsert?: Prisma.UserUpsertWithoutSavedLocationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedLocationsInput, Prisma.UserUpdateWithoutSavedLocationsInput>, Prisma.UserUncheckedUpdateWithoutSavedLocationsInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
 }
 
 export type UserCreateNestedOneWithoutDriverProfileInput = {
@@ -482,18 +546,189 @@ export type UserUpdateOneRequiredWithoutRatingsReceivedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRatingsReceivedInput, Prisma.UserUpdateWithoutRatingsReceivedInput>, Prisma.UserUncheckedUpdateWithoutRatingsReceivedInput>
 }
 
+export type UserCreateWithoutSavedLocationsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  phone?: string | null
+  profilePicture?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
+  ridesAsCustomer?: Prisma.RideCreateNestedManyWithoutCustomerInput
+  ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
+  ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSavedLocationsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  phone?: string | null
+  profilePicture?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
+  ridesAsCustomer?: Prisma.RideUncheckedCreateNestedManyWithoutCustomerInput
+  ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
+  ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSavedLocationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedLocationsInput, Prisma.UserUncheckedCreateWithoutSavedLocationsInput>
+}
+
+export type UserUpsertWithoutSavedLocationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedLocationsInput, Prisma.UserUncheckedUpdateWithoutSavedLocationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedLocationsInput, Prisma.UserUncheckedCreateWithoutSavedLocationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedLocationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedLocationsInput, Prisma.UserUncheckedUpdateWithoutSavedLocationsInput>
+}
+
+export type UserUpdateWithoutSavedLocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
+  ridesAsCustomer?: Prisma.RideUpdateManyWithoutCustomerNestedInput
+  ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
+  ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedLocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
+  ridesAsCustomer?: Prisma.RideUncheckedUpdateManyWithoutCustomerNestedInput
+  ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
+  ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  phone?: string | null
+  profilePicture?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
+  ridesAsCustomer?: Prisma.RideCreateNestedManyWithoutCustomerInput
+  ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
+  ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
+  ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  phone?: string | null
+  profilePicture?: string | null
+  role?: $Enums.Role
+  createdAt?: Date | string
+  driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
+  ridesAsCustomer?: Prisma.RideUncheckedCreateNestedManyWithoutCustomerInput
+  ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
+  ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
+  ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
+  ridesAsCustomer?: Prisma.RideUpdateManyWithoutCustomerNestedInput
+  ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
+  ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
+  ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
+  ridesAsCustomer?: Prisma.RideUncheckedUpdateManyWithoutCustomerNestedInput
+  ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
+  ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
+  ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutDriverProfileInput = {
   id?: string
   clerkId: string
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   ridesAsCustomer?: Prisma.RideCreateNestedManyWithoutCustomerInput
   ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDriverProfileInput = {
@@ -502,12 +737,15 @@ export type UserUncheckedCreateWithoutDriverProfileInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   ridesAsCustomer?: Prisma.RideUncheckedCreateNestedManyWithoutCustomerInput
   ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDriverProfileInput = {
@@ -532,12 +770,15 @@ export type UserUpdateWithoutDriverProfileInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ridesAsCustomer?: Prisma.RideUpdateManyWithoutCustomerNestedInput
   ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDriverProfileInput = {
@@ -546,12 +787,15 @@ export type UserUncheckedUpdateWithoutDriverProfileInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ridesAsCustomer?: Prisma.RideUncheckedUpdateManyWithoutCustomerNestedInput
   ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRidesAsCustomerInput = {
@@ -560,12 +804,15 @@ export type UserCreateWithoutRidesAsCustomerInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
   ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRidesAsCustomerInput = {
@@ -574,12 +821,15 @@ export type UserUncheckedCreateWithoutRidesAsCustomerInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
   ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRidesAsCustomerInput = {
@@ -593,12 +843,15 @@ export type UserCreateWithoutRidesAsDriverInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
   ridesAsCustomer?: Prisma.RideCreateNestedManyWithoutCustomerInput
   ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRidesAsDriverInput = {
@@ -607,12 +860,15 @@ export type UserUncheckedCreateWithoutRidesAsDriverInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
   ridesAsCustomer?: Prisma.RideUncheckedCreateNestedManyWithoutCustomerInput
   ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
   ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRidesAsDriverInput = {
@@ -637,12 +893,15 @@ export type UserUpdateWithoutRidesAsCustomerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
   ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRidesAsCustomerInput = {
@@ -651,12 +910,15 @@ export type UserUncheckedUpdateWithoutRidesAsCustomerInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
   ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutRidesAsDriverInput = {
@@ -676,12 +938,15 @@ export type UserUpdateWithoutRidesAsDriverInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
   ridesAsCustomer?: Prisma.RideUpdateManyWithoutCustomerNestedInput
   ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRidesAsDriverInput = {
@@ -690,12 +955,15 @@ export type UserUncheckedUpdateWithoutRidesAsDriverInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
   ridesAsCustomer?: Prisma.RideUncheckedUpdateManyWithoutCustomerNestedInput
   ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
   ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRatingsGivenInput = {
@@ -704,12 +972,15 @@ export type UserCreateWithoutRatingsGivenInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
   ridesAsCustomer?: Prisma.RideCreateNestedManyWithoutCustomerInput
   ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
   ratingsReceived?: Prisma.RatingCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRatingsGivenInput = {
@@ -718,12 +989,15 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
   ridesAsCustomer?: Prisma.RideUncheckedCreateNestedManyWithoutCustomerInput
   ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
   ratingsReceived?: Prisma.RatingUncheckedCreateNestedManyWithoutRateeInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRatingsGivenInput = {
@@ -737,12 +1011,15 @@ export type UserCreateWithoutRatingsReceivedInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutUserInput
   ridesAsCustomer?: Prisma.RideCreateNestedManyWithoutCustomerInput
   ridesAsDriver?: Prisma.RideCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingCreateNestedManyWithoutRaterInput
+  savedLocations?: Prisma.SavedLocationCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRatingsReceivedInput = {
@@ -751,12 +1028,15 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   name: string
   email: string
   phone?: string | null
+  profilePicture?: string | null
   role?: $Enums.Role
   createdAt?: Date | string
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutUserInput
   ridesAsCustomer?: Prisma.RideUncheckedCreateNestedManyWithoutCustomerInput
   ridesAsDriver?: Prisma.RideUncheckedCreateNestedManyWithoutDriverInput
   ratingsGiven?: Prisma.RatingUncheckedCreateNestedManyWithoutRaterInput
+  savedLocations?: Prisma.SavedLocationUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRatingsReceivedInput = {
@@ -781,12 +1061,15 @@ export type UserUpdateWithoutRatingsGivenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
   ridesAsCustomer?: Prisma.RideUpdateManyWithoutCustomerNestedInput
   ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
   ratingsReceived?: Prisma.RatingUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRatingsGivenInput = {
@@ -795,12 +1078,15 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
   ridesAsCustomer?: Prisma.RideUncheckedUpdateManyWithoutCustomerNestedInput
   ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
   ratingsReceived?: Prisma.RatingUncheckedUpdateManyWithoutRateeNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutRatingsReceivedInput = {
@@ -820,12 +1106,15 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutUserNestedInput
   ridesAsCustomer?: Prisma.RideUpdateManyWithoutCustomerNestedInput
   ridesAsDriver?: Prisma.RideUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUpdateManyWithoutRaterNestedInput
+  savedLocations?: Prisma.SavedLocationUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
@@ -834,12 +1123,15 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutUserNestedInput
   ridesAsCustomer?: Prisma.RideUncheckedUpdateManyWithoutCustomerNestedInput
   ridesAsDriver?: Prisma.RideUncheckedUpdateManyWithoutDriverNestedInput
   ratingsGiven?: Prisma.RatingUncheckedUpdateManyWithoutRaterNestedInput
+  savedLocations?: Prisma.SavedLocationUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -852,6 +1144,8 @@ export type UserCountOutputType = {
   ridesAsDriver: number
   ratingsGiven: number
   ratingsReceived: number
+  savedLocations: number
+  notifications: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -859,6 +1153,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   ridesAsDriver?: boolean | UserCountOutputTypeCountRidesAsDriverArgs
   ratingsGiven?: boolean | UserCountOutputTypeCountRatingsGivenArgs
   ratingsReceived?: boolean | UserCountOutputTypeCountRatingsReceivedArgs
+  savedLocations?: boolean | UserCountOutputTypeCountSavedLocationsArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -899,6 +1195,20 @@ export type UserCountOutputTypeCountRatingsReceivedArgs<ExtArgs extends runtime.
   where?: Prisma.RatingWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedLocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedLocationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -906,6 +1216,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   email?: boolean
   phone?: boolean
+  profilePicture?: boolean
   role?: boolean
   createdAt?: boolean
   driverProfile?: boolean | Prisma.User$driverProfileArgs<ExtArgs>
@@ -913,6 +1224,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   ridesAsDriver?: boolean | Prisma.User$ridesAsDriverArgs<ExtArgs>
   ratingsGiven?: boolean | Prisma.User$ratingsGivenArgs<ExtArgs>
   ratingsReceived?: boolean | Prisma.User$ratingsReceivedArgs<ExtArgs>
+  savedLocations?: boolean | Prisma.User$savedLocationsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -922,6 +1235,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   phone?: boolean
+  profilePicture?: boolean
   role?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -932,6 +1246,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   phone?: boolean
+  profilePicture?: boolean
   role?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -942,17 +1257,20 @@ export type UserSelectScalar = {
   name?: boolean
   email?: boolean
   phone?: boolean
+  profilePicture?: boolean
   role?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clerkId" | "name" | "email" | "phone" | "role" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clerkId" | "name" | "email" | "phone" | "profilePicture" | "role" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   driverProfile?: boolean | Prisma.User$driverProfileArgs<ExtArgs>
   ridesAsCustomer?: boolean | Prisma.User$ridesAsCustomerArgs<ExtArgs>
   ridesAsDriver?: boolean | Prisma.User$ridesAsDriverArgs<ExtArgs>
   ratingsGiven?: boolean | Prisma.User$ratingsGivenArgs<ExtArgs>
   ratingsReceived?: boolean | Prisma.User$ratingsReceivedArgs<ExtArgs>
+  savedLocations?: boolean | Prisma.User$savedLocationsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -966,6 +1284,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     ridesAsDriver: Prisma.$RidePayload<ExtArgs>[]
     ratingsGiven: Prisma.$RatingPayload<ExtArgs>[]
     ratingsReceived: Prisma.$RatingPayload<ExtArgs>[]
+    savedLocations: Prisma.$SavedLocationPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -973,6 +1293,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     email: string
     phone: string | null
+    profilePicture: string | null
     role: $Enums.Role
     createdAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1374,6 +1695,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   ridesAsDriver<T extends Prisma.User$ridesAsDriverArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ridesAsDriverArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RidePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ratingsGiven<T extends Prisma.User$ratingsGivenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ratingsGivenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ratingsReceived<T extends Prisma.User$ratingsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ratingsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedLocations<T extends Prisma.User$savedLocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedLocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedLocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1408,6 +1731,7 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
+  readonly profilePicture: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1915,6 +2239,54 @@ export type User$ratingsReceivedArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.RatingScalarFieldEnum | Prisma.RatingScalarFieldEnum[]
+}
+
+/**
+ * User.savedLocations
+ */
+export type User$savedLocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedLocation
+   */
+  select?: Prisma.SavedLocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedLocation
+   */
+  omit?: Prisma.SavedLocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedLocationInclude<ExtArgs> | null
+  where?: Prisma.SavedLocationWhereInput
+  orderBy?: Prisma.SavedLocationOrderByWithRelationInput | Prisma.SavedLocationOrderByWithRelationInput[]
+  cursor?: Prisma.SavedLocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedLocationScalarFieldEnum | Prisma.SavedLocationScalarFieldEnum[]
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

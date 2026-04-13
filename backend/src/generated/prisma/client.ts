@@ -47,6 +47,16 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model SavedLocation
+ * 
+ */
+export type SavedLocation = Prisma.SavedLocationModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model DriverProfile
  * 
  */
