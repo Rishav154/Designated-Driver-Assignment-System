@@ -41,7 +41,7 @@ const buttonConfig: Record<string, { label: string; icon: React.ReactNode; class
   IN_PROGRESS: {
     label: 'Complete Ride',
     icon: <Flag size={18} />,
-    className: 'bg-black hover:bg-gray-900 text-white',
+    className: 'bg-foreground hover:opacity-90 text-background',
   },
   COMPLETED: {
     label: 'Ride Completed',
@@ -131,17 +131,32 @@ export default function DriverRidePage() {
 
   if (!ride) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="w-10 h-10 border-4 border-gray-200 border-t-black rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-10 h-10 border-4 border-muted border-t-foreground rounded-full animate-spin" />
       </div>
     )
   }
 
-  const btn = buttonConfig[ride.status] ?? buttonConfig.COMPLETED
+  let btn = { ...buttonConfig[ride.status] ?? buttonConfig.COMPLETED }
+  if (ride.status === 'COMPLETED' && ride.payment?.status === 'PAID') {
+    btn.label = 'Back to Dashboard'
+    btn.icon = <ArrowLeft size={18} />
+    btn.className = 'bg-foreground text-background hover:opacity-90'
+  }
   const initials = ride.customer?.name?.charAt(0)?.toUpperCase() || 'C'
 
+  async function handleBtnClick() {
+    if (!ride) return
+    if (ride.status === 'COMPLETED' && ride.payment?.status === 'PAID') {
+      router.push('/driver/dashboard')
+      return
+    }
+    if (ride.status === 'COMPLETED') return
+    handleAction()
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-24 pb-12 px-4 max-w-2xl mx-auto space-y-4">
         <motion.div
@@ -153,13 +168,13 @@ export default function DriverRidePage() {
           <div className="flex items-center gap-3 mb-6">
             <button
               onClick={() => router.push('/driver/dashboard')}
-              className="flex items-center justify-center w-9 h-9 rounded-xl border border-gray-200 hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-center w-9 h-9 rounded-xl border border-border hover:bg-muted transition-colors"
             >
               <ArrowLeft size={18} />
             </button>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-black">Ride Details</h1>
+                <h1 className="text-xl font-bold text-foreground">Ride Details</h1>
                 <StatusBadge status={ride.status} />
               </div>
             </div>
@@ -189,17 +204,17 @@ export default function DriverRidePage() {
           </div>
 
           {/* Customer card */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-4">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">Customer</p>
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6 mb-4">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Customer</p>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white font-bold text-xl shrink-0">
+              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-bold text-xl shrink-0">
                 {initials}
               </div>
               <div>
-                <p className="font-bold text-black">{ride.customer?.name}</p>
+                <p className="font-bold text-foreground">{ride.customer?.name}</p>
                 <a
                   href={`tel:${ride.customer?.phone}`}
-                  className="flex items-center gap-1 text-gray-500 text-sm hover:text-black transition-colors mt-0.5"
+                  className="flex items-center gap-1 text-muted-foreground text-sm hover:text-foreground transition-colors mt-0.5"
                 >
                   <Phone size={12} />
                   {ride.customer?.phone}
@@ -209,33 +224,33 @@ export default function DriverRidePage() {
           </div>
 
           {/* Route card */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">Route</p>
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Route</p>
             <div className="flex flex-col gap-0">
               <div className="flex items-start gap-3">
                 <div className="w-3 h-3 rounded-full bg-green-500 mt-1 shrink-0" />
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">Pickup</p>
-                  <p className="text-sm font-semibold text-black">{ride.pickupAddress}</p>
+                  <p className="text-xs text-muted-foreground mb-0.5">Pickup</p>
+                  <p className="text-sm font-semibold text-foreground">{ride.pickupAddress}</p>
                 </div>
               </div>
-              <div className="ml-[5px] h-8 w-px border-l-2 border-dashed border-gray-200" />
+              <div className="ml-[5px] h-8 w-px border-l-2 border-dashed border-border" />
               <div className="flex items-start gap-3">
                 <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0" />
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">Dropoff</p>
-                  <p className="text-sm font-semibold text-black">{ride.dropoffAddress}</p>
+                  <p className="text-xs text-muted-foreground mb-0.5">Dropoff</p>
+                  <p className="text-sm font-semibold text-foreground">{ride.dropoffAddress}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Fare</p>
-            <p className="text-5xl font-black text-black">₹{ride.fareEstimate}</p>
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-6 text-center">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Fare</p>
+            <p className="text-5xl font-black text-foreground">₹{ride.fareEstimate}</p>
             
             {ride.status === 'COMPLETED' && (
-              <div className="mt-4 pt-4 border-t border-gray-50">
+              <div className="mt-4 pt-4 border-t border-border">
                 {ride.payment?.status === 'PAID' ? (
                   <div className="flex flex-col items-center">
                     <div className="bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
@@ -263,9 +278,9 @@ export default function DriverRidePage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              onClick={ride.status !== 'COMPLETED' ? handleAction : undefined}
-              disabled={loading || ride.status === 'COMPLETED'}
-              whileTap={ride.status !== 'COMPLETED' ? { scale: 0.97 } : {}}
+              onClick={handleBtnClick}
+              disabled={loading || (ride.status === 'COMPLETED' && ride.payment?.status !== 'PAID')}
+              whileTap={ride.status === 'COMPLETED' && ride.payment?.status !== 'PAID' ? {} : { scale: 0.97 }}
               className={`w-full rounded-xl py-4 font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2 ${btn.className} disabled:opacity-60`}
             >
               {loading ? (

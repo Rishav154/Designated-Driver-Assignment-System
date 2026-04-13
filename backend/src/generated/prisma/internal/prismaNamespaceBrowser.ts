@@ -155,6 +155,8 @@ export const PaymentScalarFieldEnum = {
   id: 'id',
   rideId: 'rideId',
   amount: 'amount',
+  method: 'method',
+  paymentId: 'paymentId',
   status: 'status',
   createdAt: 'createdAt'
 } as const

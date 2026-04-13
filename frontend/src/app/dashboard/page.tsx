@@ -381,7 +381,7 @@ export default function DashboardPage() {
                       onClick={bookRide}
                       disabled={booking}
                       whileTap={{ scale: 0.97 }}
-                      className="bg-black text-white rounded-xl py-3 px-6 font-semibold text-sm hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-150"
+                      className="bg-foreground text-background rounded-xl py-3 px-6 font-semibold text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-150"
                     >
                       {booking ? (
                         <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

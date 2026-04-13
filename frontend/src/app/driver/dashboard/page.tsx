@@ -166,12 +166,12 @@ export default function DriverDashboard() {
                 </div>
                 <h3 className="font-bold text-foreground">Today&apos;s Overview</h3>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-2 gap-4 divide-x divide-border">
+                <div className="pr-2">
                   <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Income</p>
                   <p className="text-2xl font-black text-foreground">₹{stats?.todayIncome || 0}</p>
                 </div>
-                <div>
+                <div className="pl-4">
                   <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Rides</p>
                   <p className="text-2xl font-black text-foreground">{stats?.todayRides || 0}</p>
                 </div>
@@ -191,12 +191,12 @@ export default function DriverDashboard() {
                 </div>
                 <h3 className="font-bold text-foreground">Lifetime Summary</h3>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-2 gap-4 divide-x divide-border">
+                <div className="pr-2">
                   <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Total Income</p>
                   <p className="text-2xl font-black text-foreground">₹{stats?.totalIncome || 0}</p>
                 </div>
-                <div>
+                <div className="pl-4">
                   <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Total Rides</p>
                   <p className="text-2xl font-black text-foreground">{stats?.totalRides || 0}</p>
                 </div>
@@ -329,7 +329,7 @@ export default function DriverDashboard() {
                         <motion.button
                           onClick={() => router.push(`/driver/rides/${ride.id}`)}
                           whileTap={{ scale: 0.95 }}
-                          className="mt-2 bg-black text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-800 transition-colors"
+                          className="mt-2 bg-foreground text-background px-3 py-1.5 rounded-lg text-xs font-semibold hover:opacity-90 transition-colors"
                         >
                           View
                         </motion.button>
@@ -461,8 +461,8 @@ export default function DriverDashboard() {
             </div>
 
             {stats?.feedback.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
-                <p className="text-gray-400 text-sm">No feedback received yet</p>
+              <div className="bg-card rounded-2xl border border-border shadow-sm p-12 text-center">
+                <p className="text-muted-foreground text-sm">No feedback received yet</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

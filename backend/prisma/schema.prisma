@@ -86,6 +86,8 @@ model Payment {
   rideId    String        @unique
   ride      Ride          @relation(fields: [rideId], references: [id])
   amount    Float
+  method    String?       @default("ONLINE")
+  paymentId String?
   status    PaymentStatus @default(PENDING)
   createdAt DateTime      @default(now())
 }
