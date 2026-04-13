@@ -5,11 +5,11 @@ interface StatusBadgeProps {
 }
 
 const statusMap: Record<string, string> = {
-  SEARCHING: 'bg-amber-50 text-amber-700 border border-amber-200',
-  DRIVER_ASSIGNED: 'bg-blue-50 text-blue-700 border border-blue-200',
-  IN_PROGRESS: 'bg-green-50 text-green-700 border border-green-200',
-  COMPLETED: 'bg-gray-100 text-gray-600 border border-gray-200',
-  CANCELLED: 'bg-red-50 text-red-700 border border-red-200',
+  SEARCHING: 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20',
+  DRIVER_ASSIGNED: 'bg-blue-500/10 text-blue-600 dark:text-blue-500 border border-blue-500/20',
+  IN_PROGRESS: 'bg-green-500/10 text-green-600 dark:text-green-500 border border-green-500/20',
+  COMPLETED: 'bg-muted text-muted-foreground border border-border',
+  CANCELLED: 'bg-red-500/10 text-red-600 dark:text-red-500 border border-red-500/20',
 }
 
 const labelMap: Record<string, string> = {

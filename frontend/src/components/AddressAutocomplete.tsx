@@ -120,25 +120,25 @@ export default function AddressAutocomplete({ placeholder, value, onSelect, icon
           onFocus={() => {
             if (suggestions.length > 0) setIsOpen(true)
           }}
-          className={`border border-gray-200 rounded-xl py-3 w-full text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent placeholder:text-gray-400 transition-all ${icon ? 'pl-10 pr-4' : 'px-4'}`}
+          className={`bg-background border border-border rounded-xl py-3 w-full text-sm focus:outline-none focus:ring-2 focus:ring-foreground focus:border-transparent placeholder:text-muted-foreground transition-all ${icon ? 'pl-10 pr-4' : 'px-4'}`}
         />
         {loading && (
           <div className="absolute right-3">
-            <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin inline-block" />
+            <span className="w-4 h-4 border-2 border-muted border-t-foreground rounded-full animate-spin inline-block" />
           </div>
         )}
       </div>
 
       {isOpen && suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-auto">
+        <ul className="absolute z-10 w-full mt-1 bg-card border border-border rounded-xl shadow-lg max-h-60 overflow-auto">
           {suggestions.map((s, idx) => (
             <li
               key={s.eLoc || idx}
               onClick={() => handleSelect(s)}
-              className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
+              className="px-4 py-3 hover:bg-muted cursor-pointer border-b border-border last:border-0"
             >
-              <p className="text-sm font-semibold text-gray-900">{s.placeName}</p>
-              <p className="text-xs text-gray-500 truncate">{s.placeAddress}</p>
+              <p className="text-sm font-semibold text-foreground">{s.placeName}</p>
+              <p className="text-xs text-muted-foreground truncate">{s.placeAddress}</p>
             </li>
           ))}
         </ul>

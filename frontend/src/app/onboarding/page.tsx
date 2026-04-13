@@ -50,20 +50,20 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 w-full max-w-md"
+        className="bg-card rounded-2xl border border-border shadow-sm p-8 w-full max-w-md"
       >
         {/* Header */}
         <div className="text-center mb-6">
-          <p className="text-2xl font-bold text-black tracking-tight mb-1">SafeRide</p>
-          <h1 className="text-xl font-bold text-black">Welcome to SafeRide</h1>
-          <p className="text-gray-500 text-sm mt-1">Tell us how you&apos;ll be using the app</p>
+          <p className="text-2xl font-bold text-foreground tracking-tight mb-1">SafeRide</p>
+          <h1 className="text-xl font-bold text-foreground">Welcome to SafeRide</h1>
+          <p className="text-muted-foreground text-sm mt-1">Tell us how you&apos;ll be using the app</p>
         </div>
-        <hr className="border-gray-100 mb-6" />
+        <hr className="border-border mb-6" />
 
         {/* Role selector */}
         <div className="grid grid-cols-2 gap-3 mb-6">
@@ -71,19 +71,19 @@ export default function OnboardingPage() {
             { key: 'CUSTOMER' as const, icon: <User size={24} />, title: 'I need a driver', desc: 'Book a designated driver for your vehicle' },
             { key: 'DRIVER' as const, icon: <Car size={24} />, title: "I'm a driver", desc: 'Accept ride requests and earn money' },
           ].map((opt) => (
-            <motion.button
+             <motion.button
               key={opt.key}
               type="button"
               onClick={() => setRole(opt.key)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`flex flex-col items-center text-center gap-2 rounded-xl p-5 border-2 transition-all duration-150 ${
-                role === opt.key ? 'border-black bg-black/5' : 'border-gray-200 hover:border-gray-300'
+                role === opt.key ? 'border-foreground bg-foreground/5' : 'border-border hover:border-muted-foreground/30'
               }`}
             >
-              <span className={role === opt.key ? 'text-black' : 'text-gray-400'}>{opt.icon}</span>
-              <span className="font-semibold text-sm text-black">{opt.title}</span>
-              <span className="text-xs text-gray-500 leading-tight">{opt.desc}</span>
+              <span className={role === opt.key ? 'text-foreground' : 'text-muted'}>{opt.icon}</span>
+              <span className="font-semibold text-sm text-foreground">{opt.title}</span>
+              <span className="text-xs text-muted-foreground leading-tight">{opt.desc}</span>
             </motion.button>
           ))}
         </div>
@@ -107,13 +107,13 @@ export default function OnboardingPage() {
                   { label: 'Number Plate', key: 'vehiclePlate', placeholder: 'MH-12-AB-1234' },
                 ].map((field) => (
                   <div key={field.key}>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1.5">{field.label}</label>
+                    <label className="block text-xs font-semibold text-muted-foreground mb-1.5">{field.label}</label>
                     <input
                       type="text"
                       placeholder={field.placeholder}
                       value={form[field.key as keyof typeof form]}
                       onChange={(e) => setForm((f) => ({ ...f, [field.key]: e.target.value }))}
-                      className="border border-gray-200 rounded-xl px-4 py-3 w-full text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent placeholder:text-gray-400 transition-all"
+                      className="bg-background border border-border rounded-xl px-4 py-3 w-full text-sm focus:outline-none focus:ring-2 focus:ring-foreground transition-all placeholder:text-muted"
                     />
                   </div>
                 ))}
@@ -124,11 +124,11 @@ export default function OnboardingPage() {
 
         {error && <div className="mb-4"><ErrorMessage message={error} /></div>}
 
-        <motion.button
+         <motion.button
           onClick={handleContinue}
           disabled={!canContinue || loading}
           whileTap={canContinue ? { scale: 0.97 } : {}}
-          className="w-full bg-black text-white rounded-xl py-3.5 font-semibold text-sm hover:bg-gray-900 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-foreground text-background rounded-xl py-3.5 font-semibold text-sm hover:opacity-90 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

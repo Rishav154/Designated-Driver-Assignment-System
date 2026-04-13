@@ -75,10 +75,10 @@ export default function NotificationBell() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
+        className="relative p-2 rounded-xl hover:bg-muted transition-colors"
         aria-label="Notifications"
       >
-        <Bell size={20} className="text-gray-700" />
+        <Bell size={20} className="text-foreground" />
         {unread > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
             {unread > 9 ? '9+' : unread}
@@ -93,10 +93,10 @@ export default function NotificationBell() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -6 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-12 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50"
+             className="absolute right-0 top-12 w-80 bg-card rounded-2xl shadow-2xl border border-border overflow-hidden z-50"
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <p className="font-semibold text-gray-900 text-sm">Notifications</p>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+              <p className="font-semibold text-foreground text-sm">Notifications</p>
               {unread > 0 && (
                 <button
                   onClick={markAllRead}
@@ -108,8 +108,8 @@ export default function NotificationBell() {
             </div>
 
             <div className="max-h-80 overflow-y-auto">
-              {notifications.length === 0 ? (
-                <div className="py-10 text-center text-gray-400 text-sm">
+               {notifications.length === 0 ? (
+                <div className="py-10 text-center text-muted-foreground text-sm">
                   <Bell size={28} className="mx-auto mb-2 opacity-30" />
                   No notifications yet
                 </div>
@@ -118,14 +118,14 @@ export default function NotificationBell() {
                   <div
                     key={n.id}
                     onClick={() => markRead(n.id)}
-                    className={`flex gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 ${!n.read ? 'bg-blue-50/50' : ''}`}
+                    className={`flex gap-3 px-4 py-3 cursor-pointer hover:bg-muted transition-colors border-b border-border last:border-0 ${!n.read ? 'bg-blue-500/10' : ''}`}
                   >
                     <span className="text-xl mt-0.5 shrink-0">{typeEmoji[n.type] ?? '🔔'}</span>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm leading-snug ${!n.read ? 'font-medium text-gray-900' : 'text-gray-700'}`}>
+                      <p className={`text-sm leading-snug ${!n.read ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
                         {n.message}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {new Date(n.createdAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
                       </p>
                     </div>

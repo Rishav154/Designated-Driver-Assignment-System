@@ -54,7 +54,7 @@ export default function WaitingPage() {
   }, [rideId, getToken, router])
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
       <AnimatePresence mode="wait">
         {!driver ? (
           <motion.div
@@ -66,19 +66,19 @@ export default function WaitingPage() {
             className="text-center"
           >
             {/* Spinning ring */}
-            <div className="w-20 h-20 border-4 border-gray-200 border-t-black rounded-full animate-spin mx-auto mb-8" />
+            <div className="w-20 h-20 border-4 border-muted border-t-foreground rounded-full animate-spin mx-auto mb-8" />
 
-            <h1 className="text-2xl font-bold text-black mb-2">Finding your driver</h1>
-            <div className="flex items-center justify-center gap-1 mb-3">
-              <p className="text-gray-500 text-sm">Looking</p>
+            <h1 className="text-2xl font-bold text-foreground mb-2">Finding your driver</h1>
+             <div className="flex items-center justify-center gap-1 mb-3">
+              <p className="text-muted-foreground text-sm">Looking</p>
               <span className="dot-pulse flex items-center">
                 <span /><span /><span />
               </span>
             </div>
-            <p className="text-gray-400 text-sm max-w-xs mx-auto mb-10">
+            <p className="text-muted-foreground/60 text-sm max-w-xs mx-auto mb-10">
               Sit tight — we&apos;re matching you with a nearby driver
             </p>
-            <p className="font-mono text-xs text-gray-300">Ride ID: {rideId}</p>
+            <p className="font-mono text-xs text-muted">Ride ID: {rideId}</p>
           </motion.div>
         ) : (
           <motion.div
@@ -95,12 +95,12 @@ export default function WaitingPage() {
               transition={{ duration: 0.4, type: 'spring', stiffness: 200 }}
               className="mb-6 flex justify-center"
             >
-              <CheckCircle className="text-green-500" size={72} strokeWidth={1.5} />
+               <CheckCircle className="text-green-500" size={72} strokeWidth={1.5} />
             </motion.div>
-            <h1 className="text-3xl font-bold text-black mb-2">Driver Found!</h1>
-            <p className="text-2xl font-semibold text-black mb-1">{driver.name}</p>
-            <p className="text-gray-500 mb-6">{driver.phone}</p>
-            <p className="text-gray-400 text-sm italic">Heading to your ride details...</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Driver Found!</h1>
+            <p className="text-2xl font-semibold text-foreground mb-1">{driver.name}</p>
+            <p className="text-muted-foreground mb-6">{driver.phone}</p>
+            <p className="text-muted-foreground/60 text-sm italic">Heading to your ride details...</p>
           </motion.div>
         )}
       </AnimatePresence>

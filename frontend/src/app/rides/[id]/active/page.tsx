@@ -55,8 +55,8 @@ export default function ActiveRidePage() {
 
   if (!ride) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="w-10 h-10 border-4 border-gray-200 border-t-black rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-10 h-10 border-4 border-muted border-t-foreground rounded-full animate-spin" />
       </div>
     )
   }
@@ -64,7 +64,7 @@ export default function ActiveRidePage() {
   const initials = ride.driver?.name?.charAt(0)?.toUpperCase() || 'D'
 
   return (
-    <div className="min-h-screen bg-gray-50">
+     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-24 pb-12 px-4 max-w-5xl mx-auto">
         <motion.div
@@ -72,8 +72,8 @@ export default function ActiveRidePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <h1 className="text-3xl font-bold text-black tracking-tight mb-1">Your Ride</h1>
-          <p className="text-gray-500 text-sm mb-8">Your driver is on the way</p>
+           <h1 className="text-3xl font-bold text-foreground tracking-tight mb-1">Your Ride</h1>
+          <p className="text-muted-foreground text-sm mb-8">Your driver is on the way</p>
 
           {/* Map Section */}
           <div className="mb-6 h-72 w-full">
@@ -90,20 +90,20 @@ export default function ActiveRidePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {/* Driver card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+             <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white font-bold text-xl">
+                <div className="w-12 h-12 rounded-full bg-foreground flex items-center justify-center text-background font-bold text-xl">
                   {initials}
                 </div>
                 <div>
-                  <p className="font-bold text-black">{ride.driver?.name}</p>
-                  <a href={`tel:${ride.driver?.phone}`} className="flex items-center gap-1 text-gray-500 text-sm hover:text-black transition-colors">
+                  <p className="font-bold text-foreground">{ride.driver?.name}</p>
+                   <a href={`tel:${ride.driver?.phone}`} className="flex items-center gap-1 text-muted-foreground text-sm hover:text-foreground transition-colors">
                     <Phone size={12} />{ride.driver?.phone}
                   </a>
                 </div>
               </div>
-              {(ride.driver?.vehicleMake || ride.driver?.vehicleModel) && (
-                <p className="text-gray-400 text-xs font-mono">
+               {(ride.driver?.vehicleMake || ride.driver?.vehicleModel) && (
+                <p className="text-muted text-xs font-mono">
                   {ride.driver.vehicleMake} {ride.driver.vehicleModel}
                   {ride.driver.numberPlate ? ` · ${ride.driver.numberPlate}` : ''}
                 </p>
@@ -111,57 +111,57 @@ export default function ActiveRidePage() {
             </div>
 
             {/* Route card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">Route</h3>
+             <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Route</h3>
               <div className="flex flex-col gap-0">
                 <div className="flex items-start gap-3">
                   <div className="w-3 h-3 rounded-full bg-green-500 mt-1 shrink-0" />
-                  <div>
-                    <p className="text-xs text-gray-400 mb-0.5">Pickup</p>
-                    <p className="text-sm font-semibold text-black">{ride.pickupAddress}</p>
+                   <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">Pickup</p>
+                    <p className="text-sm font-semibold text-foreground">{ride.pickupAddress}</p>
                   </div>
                 </div>
-                <div className="ml-[5px] h-8 w-px border-l-2 border-dashed border-gray-200" />
+                <div className="ml-[5px] h-8 w-px border-l-2 border-dashed border-border" />
                 <div className="flex items-start gap-3">
                   <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0" />
-                  <div>
-                    <p className="text-xs text-gray-400 mb-0.5">Dropoff</p>
-                    <p className="text-sm font-semibold text-black">{ride.dropoffAddress}</p>
+                   <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">Dropoff</p>
+                    <p className="text-sm font-semibold text-foreground">{ride.dropoffAddress}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Location card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+             <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
               <div className="flex items-center gap-2 mb-4">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
                 </span>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Live Location</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Live Location</p>
               </div>
               {location ? (
-                <>
-                  <p className="font-mono text-sm text-black font-semibold mb-1">
+                 <>
+                  <p className="font-mono text-sm text-foreground font-semibold mb-1">
                     {location.lat.toFixed(6)}
                   </p>
-                  <p className="font-mono text-sm text-black font-semibold mb-2">
+                  <p className="font-mono text-sm text-foreground font-semibold mb-2">
                     {location.lng.toFixed(6)}
                   </p>
-                  <p className="text-xs text-gray-400">Updated at {locationTime}</p>
+                  <p className="text-xs text-muted-foreground">Updated at {locationTime}</p>
                 </>
               ) : (
-                <p className="text-sm text-gray-400">Waiting for location update...</p>
+                 <p className="text-sm text-muted-foreground">Waiting for location update...</p>
               )}
             </div>
           </div>
 
           {/* Fare card */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Estimated Fare</p>
-            <p className="text-5xl font-black text-black">₹{ride.fareEstimate}</p>
-            <p className="text-gray-400 text-sm mt-2">Final fare confirmed on completion</p>
+           <div className="bg-card rounded-2xl border border-border shadow-sm p-6 text-center">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Estimated Fare</p>
+            <p className="text-5xl font-black text-foreground">₹{ride.fareEstimate}</p>
+            <p className="text-muted-foreground text-sm mt-2">Final fare confirmed on completion</p>
           </div>
         </motion.div>
       </div>

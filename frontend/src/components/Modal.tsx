@@ -38,14 +38,14 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 12 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className={`bg-white rounded-2xl shadow-2xl w-full ${maxWidth} overflow-hidden`}
+            className={`bg-card rounded-2xl shadow-2xl w-full ${maxWidth} overflow-hidden border border-border`}
           >
             {title && (
-              <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+              <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-border">
+                <h2 className="text-lg font-semibold text-foreground">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="text-gray-400 hover:text-gray-600 transition-colors rounded-lg p-1 hover:bg-gray-100"
+                  className="text-muted-foreground hover:text-foreground transition-colors rounded-lg p-1 hover:bg-muted"
                 >
                   <X size={20} />
                 </button>

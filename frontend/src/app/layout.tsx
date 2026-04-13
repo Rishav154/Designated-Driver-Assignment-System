@@ -5,6 +5,8 @@ import { ClerkProvider } from '@clerk/nextjs'
 import ToastProvider from '@/components/Toast'
 import { CacheProvider } from '@/context/CacheContext'
 
+import { ThemeProvider } from "@/providers/ThemeProvider"
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,11 +32,19 @@ export default function RootLayout({
       <CacheProvider>
         <html
           lang="en"
+          suppressHydrationWarning
           className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         >
-          <body className="min-h-full flex flex-col bg-white">
-            {children}
-            <ToastProvider />
+          <body className="min-h-full flex flex-col transition-colors duration-300">
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <ToastProvider />
+            </ThemeProvider>
           </body>
         </html>
       </CacheProvider>

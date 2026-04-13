@@ -79,14 +79,14 @@ export default function ProfilePage() {
   if (loading) return <LoadingScreen />
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-24 pb-16 px-4 max-w-2xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <h1 className="text-3xl font-bold text-black tracking-tight mb-1">My Profile</h1>
-          <p className="text-gray-500 text-sm mb-8">Manage your personal information</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight mb-1">My Profile</h1>
+          <p className="text-muted-foreground text-sm mb-8">Manage your personal information</p>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+          <div className="bg-card rounded-2xl border border-border shadow-sm p-8">
             {/* Avatar */}
             <div className="flex flex-col items-center mb-8">
               <div className="relative group cursor-pointer" onClick={() => fileRef.current?.click()}>
@@ -94,11 +94,11 @@ export default function ProfilePage() {
                   <img
                     src={picture}
                     alt="Profile"
-                    className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                    className="w-24 h-24 rounded-full object-cover border-4 border-card shadow-lg"
                   />
                 ) : (
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 border-4 border-white shadow-lg flex items-center justify-center">
-                    <User size={36} className="text-gray-400" />
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-muted to-border border-4 border-card shadow-lg flex items-center justify-center">
+                    <User size={36} className="text-muted-foreground" />
                   </div>
                 )}
                 <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -108,50 +108,50 @@ export default function ProfilePage() {
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
               <button
                 onClick={() => fileRef.current?.click()}
-                className="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                className="mt-3 text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors"
               >
                 Change photo
               </button>
-              <p className="text-xs text-gray-400 mt-1">Max 2 MB · JPG, PNG, WebP</p>
+              <p className="text-xs text-muted mt-1">Max 2 MB · JPG, PNG, WebP</p>
             </div>
 
             {/* Fields */}
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-foreground mb-1.5">
                   <User size={14} className="inline mr-1.5 mb-0.5" />Full Name
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground focus:border-transparent transition-all"
                   placeholder="Your full name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-foreground mb-1.5">
                   <Mail size={14} className="inline mr-1.5 mb-0.5" />Email
                 </label>
                 <input
                   type="email"
                   value={profile?.email ?? ''}
                   disabled
-                  className="w-full border border-gray-100 rounded-xl px-4 py-3 text-sm bg-gray-50 text-gray-400 cursor-not-allowed"
+                  className="w-full bg-muted border border-border rounded-xl px-4 py-3 text-sm text-muted-foreground cursor-not-allowed"
                 />
-                <p className="text-xs text-gray-400 mt-1">Email cannot be changed here.</p>
+                <p className="text-xs text-muted mt-1">Email cannot be changed here.</p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-foreground mb-1.5">
                   <Phone size={14} className="inline mr-1.5 mb-0.5" />Phone Number
                 </label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                  className="w-full bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground focus:border-transparent transition-all"
                   placeholder="+91 98765 43210"
                 />
               </div>
@@ -161,7 +161,7 @@ export default function ProfilePage() {
               onClick={handleSave}
               disabled={saving}
               whileTap={{ scale: 0.97 }}
-              className="mt-8 w-full bg-gray-900 text-white rounded-xl py-3.5 font-semibold text-sm hover:bg-black disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+              className="mt-8 w-full bg-foreground text-background rounded-xl py-3.5 font-semibold text-sm hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
             >
               {saving ? (
                 <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

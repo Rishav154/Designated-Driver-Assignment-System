@@ -22,7 +22,7 @@ export default function StarRating({ value, onChange }: StarRatingProps) {
           <Star
             size={40}
             className={`transition-colors duration-150 ${
-              n <= value ? 'fill-yellow-400 text-yellow-400' : 'fill-none text-gray-300'
+              n <= value ? 'fill-yellow-400 text-yellow-400' : 'fill-none text-muted'
             }`}
           />
         </motion.button>

@@ -18,21 +18,42 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-const BASE_FARE = 50
-const RATE_PER_KM = 15
+function calculateFare(distanceKm: number) {
+    const BASE_KM = 3
+    const BASE_PRICE = 69
+    const PER_KM_AFTER_BASE = 13
+    const NIGHT_SURGE = 40
+
+    let fare = BASE_PRICE
+    if (distanceKm > BASE_KM) {
+        fare += (distanceKm - BASE_KM) * PER_KM_AFTER_BASE
+    }
+
+    // Night surge: 11 PM to 6 AM
+    // Using IST (assuming server time or UTC+5:30)
+    // To be safe, we'll use current hour from the environment
+    const now = new Date()
+    const currentHour = now.getHours() // Local time of the environment
+
+    if (currentHour >= 23 || currentHour < 6) {
+        fare += NIGHT_SURGE
+    }
+
+    return Math.round(fare)
+}
 
 // POST /api/rides/estimate
 router.post('/estimate', requireAuth, async (req, res) => {
     const { pickupLat, pickupLng, dropoffLat, dropoffLng } = req.body
     try {
         const { distanceKm, durationSeconds } = await osrmDistance(pickupLat, pickupLng, dropoffLat, dropoffLng)
-        const fare = BASE_FARE + distanceKm * RATE_PER_KM
-        res.json({ distance: distanceKm.toFixed(2), fare: Math.round(fare), durationSeconds })
+        const fare = calculateFare(distanceKm)
+        res.json({ distance: distanceKm.toFixed(2), fare, durationSeconds })
     } catch (error) {
         // Fallback to Haversine
         const distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
-        const fare = BASE_FARE + distance * RATE_PER_KM
-        res.json({ distance: distance.toFixed(2), fare: Math.round(fare), fallback: true })
+        const fare = calculateFare(distance)
+        res.json({ distance: distance.toFixed(2), fare, fallback: true })
     }
 })
 
@@ -55,7 +76,7 @@ router.post('/book', requireAuth, async (req, res) => {
         distance = haversineKm(pickupLat, pickupLng, dropoffLat, dropoffLng)
     }
 
-    const fareEstimate = Math.round(BASE_FARE + distance * RATE_PER_KM)
+    const fareEstimate = calculateFare(distance)
 
     const rideData: any = {
         customerId: customer.id,

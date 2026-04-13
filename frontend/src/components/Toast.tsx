@@ -24,9 +24,9 @@ const icons: Record<ToastVariant, React.ReactNode> = {
 }
 
 const variantStyles: Record<ToastVariant, string> = {
-  success: 'border-emerald-100 bg-white',
-  error: 'border-red-100 bg-white',
-  info: 'border-blue-100 bg-white',
+  success: 'border-emerald-500/20 bg-card',
+  error: 'border-red-500/20 bg-card',
+  info: 'border-blue-500/20 bg-card',
 }
 
 export default function ToastProvider() {
@@ -56,10 +56,10 @@ export default function ToastProvider() {
             className={`pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl border shadow-lg max-w-sm ${variantStyles[t.variant]}`}
           >
             {icons[t.variant]}
-            <p className="text-sm text-gray-800 flex-1">{t.message}</p>
+            <p className="text-sm text-foreground flex-1">{t.message}</p>
             <button
               onClick={() => remove(t.id)}
-              className="text-gray-400 hover:text-gray-600 transition-colors mt-0.5"
+              className="text-muted-foreground hover:text-foreground transition-colors mt-0.5"
             >
               <X size={14} />
             </button>

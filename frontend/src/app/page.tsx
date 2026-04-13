@@ -100,9 +100,9 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="bg-white py-24 px-6">
+      <section className="bg-background py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-bold tracking-widest text-gray-400 text-center mb-12 uppercase">
+          <p className="text-xs font-bold tracking-widest text-muted-foreground text-center mb-12 uppercase">
             How It Works
           </p>
           <motion.div
@@ -135,12 +135,12 @@ export default function LandingPage() {
               <motion.div
                 key={f.num}
                 variants={cardItem}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 hover:shadow-md transition-shadow duration-200"
+                className="bg-card rounded-2xl border border-border shadow-sm p-8 hover:shadow-md transition-shadow duration-200"
               >
-                <p className="text-4xl font-black text-gray-100 mb-4">{f.num}</p>
+                <p className="text-4xl font-black text-muted/30 mb-4">{f.num}</p>
                 <div className="mb-3">{f.icon}</div>
-                <h3 className="text-lg font-bold text-black mb-2">{f.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                <h3 className="text-lg font-bold text-foreground mb-2">{f.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </motion.div>

@@ -1,6 +1,6 @@
 'use client'
 import { useAuth } from '@clerk/nextjs'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { io } from 'socket.io-client'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -24,6 +24,7 @@ interface RideData {
   fareEstimate: number
   customer: { name: string; phone: string }
   driver?: { id: string; name: string }
+  payment?: { amount: number; status: string }
 }
 
 const buttonConfig: Record<string, { label: string; icon: React.ReactNode; className: string }> = {
@@ -58,13 +59,27 @@ export default function DriverRidePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
+  const fetchRide = useCallback(async () => {
     if (!rideId) return
-    getApi(getToken)
-      .then((api) => api.get(`/api/rides/${rideId}`))
-      .then((res) => setRide(res.data))
-      .catch(() => setError('Failed to load ride details.'))
-  }, [rideId])
+    try {
+      const api = await getApi(getToken)
+      const res = await api.get(`/api/rides/${rideId}`)
+      setRide(res.data)
+    } catch {
+      setError('Failed to load ride details.')
+    }
+  }, [rideId, getToken])
+
+  useEffect(() => {
+    fetchRide()
+  }, [fetchRide])
+
+  // Poll for payment when COMPLETED
+  useEffect(() => {
+    if (!ride || ride.status !== 'COMPLETED' || ride.payment?.status === 'PAID') return
+    const poll = setInterval(fetchRide, 5000)
+    return () => clearInterval(poll)
+  }, [ride?.status, ride?.payment?.status, fetchRide])
 
   // Send live location only when IN_PROGRESS
   useEffect(() => {
@@ -105,7 +120,7 @@ export default function DriverRidePage() {
       } else if (ride.status === 'IN_PROGRESS') {
         await api.post(`/api/rides/${rideId}/complete`)
         setRide((r) => r ? { ...r, status: 'COMPLETED' } : r)
-        router.push('/driver/dashboard')
+        // Don't redirect immediately so they can see "Waiting for payment"
       }
     } catch {
       setError('Action failed. Please try again.')
@@ -215,10 +230,29 @@ export default function DriverRidePage() {
             </div>
           </div>
 
-          {/* Fare card */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Fare</p>
             <p className="text-5xl font-black text-black">₹{ride.fareEstimate}</p>
+            
+            {ride.status === 'COMPLETED' && (
+              <div className="mt-4 pt-4 border-t border-gray-50">
+                {ride.payment?.status === 'PAID' ? (
+                  <div className="flex flex-col items-center">
+                    <div className="bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                       <Check size={16} /> Payment Received
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">₹{ride.payment.amount} added to your wallet</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <div className="bg-orange-50 text-orange-600 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                      Waiting for Payment...
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Action button with AnimatePresence */}

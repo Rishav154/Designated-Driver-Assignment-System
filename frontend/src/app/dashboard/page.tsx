@@ -175,7 +175,7 @@ export default function DashboardPage() {
   if (checking) return <LoadingScreen />
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-24 pb-12 px-4 max-w-5xl mx-auto">
         <motion.div
@@ -183,15 +183,15 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <h1 className="text-3xl font-bold text-black tracking-tight mb-1">Book a Ride</h1>
-          <p className="text-gray-500 text-sm mb-8">Enter your pickup and dropoff locations to get started</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight mb-1">Book a Ride</h1>
+          <p className="text-muted-foreground text-sm mb-8">Enter your pickup and dropoff locations to get started</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             {/* Pickup card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="text-green-500" size={20} />
-                <h2 className="font-semibold text-black">Pickup Location</h2>
+                <h2 className="font-semibold text-foreground">Pickup Location</h2>
               </div>
               <div className="flex flex-col gap-3">
                 <div className="min-h-[120px] flex flex-col gap-3">
@@ -208,8 +208,8 @@ export default function DashboardPage() {
                           key={loc.id}
                           onClick={() => setPickup({ address: loc.address, lat: loc.lat.toString(), lng: loc.lng.toString() })}
                           className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${pickup.address === loc.address
-                            ? 'bg-gray-900 text-white border-gray-900'
-                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-400'
+                            ? 'bg-foreground text-background border-foreground'
+                            : 'bg-muted text-muted-foreground border-border hover:border-foreground/50'
                             }`}
                         >
                           {locationIcon(loc.label)}
@@ -259,15 +259,15 @@ export default function DashboardPage() {
                   }}
                   className="h-64 w-full rounded-xl mt-2"
                 />
-                <p className="text-xs text-gray-500 text-center">🗺 Tap on the map or drag the pin to set your pickup location</p>
+                <p className="text-xs text-muted-foreground text-center">🗺 Tap on the map or drag the pin to set your pickup location</p>
               </div>
             </div>
 
             {/* Dropoff card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Flag className="text-red-500" size={20} />
-                <h2 className="font-semibold text-black">Dropoff Location</h2>
+                <h2 className="font-semibold text-foreground">Dropoff Location</h2>
               </div>
               <div className="flex flex-col gap-3">
                 <div className="min-h-[120px] flex flex-col gap-3">
@@ -284,8 +284,8 @@ export default function DashboardPage() {
                           key={loc.id}
                           onClick={() => setDropoff({ address: loc.address, lat: loc.lat.toString(), lng: loc.lng.toString() })}
                           className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${dropoff.address === loc.address
-                            ? 'bg-gray-900 text-white border-gray-900'
-                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-400'
+                            ? 'bg-foreground text-background border-foreground'
+                            : 'bg-muted text-muted-foreground border-border hover:border-foreground/50'
                             }`}
                         >
                           {locationIcon(loc.label)}
@@ -328,7 +328,7 @@ export default function DashboardPage() {
                   }}
                   className="h-64 w-full rounded-xl mt-2"
                 />
-                <p className="text-xs text-gray-500 text-center">🗺 Tap on the map or drag the pin to set your dropoff location</p>
+                <p className="text-xs text-muted-foreground text-center">🗺 Tap on the map or drag the pin to set your dropoff location</p>
               </div>
             </div>
           </div>
@@ -338,7 +338,7 @@ export default function DashboardPage() {
             onClick={estimateFare}
             disabled={estimating || !pickup.lat || !pickup.lng || !dropoff.lat || !dropoff.lng}
             whileTap={{ scale: 0.97 }}
-            className="w-full border-2 border-gray-900 text-gray-900 rounded-xl py-3.5 font-semibold hover:bg-gray-50 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mb-4"
+            className="w-full border-2 border-foreground text-foreground rounded-xl py-3.5 font-semibold hover:bg-muted active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mb-4"
           >
             {estimating ? (
               <span className="w-5 h-5 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin" />
@@ -346,7 +346,7 @@ export default function DashboardPage() {
           </motion.button>
 
           {(!pickup.lat || !pickup.lng || !dropoff.lat || !dropoff.lng) && (
-            <p className="text-center text-sm text-gray-500 mb-6 font-medium">
+            <p className="text-center text-sm text-muted-foreground mb-6 font-medium">
               ⓘ Set pickup location using "Use my location" and dropoff using the map pin
             </p>
           )}
@@ -362,19 +362,19 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-4"
+                className="bg-card rounded-2xl border border-border shadow-sm p-6 mt-4"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold">Distance</p>
-                    <p className="text-2xl font-bold text-gray-700">{Number(fare.distance).toFixed(2)} km</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Distance</p>
+                    <p className="text-2xl font-bold text-foreground">{Number(fare.distance).toFixed(2)} km</p>
                     {fare.durationSeconds && (
-                      <p className="text-sm text-gray-500 mt-1">~{Math.round(fare.durationSeconds / 60)} min drive</p>
+                      <p className="text-sm text-muted-foreground mt-1">~{Math.round(fare.durationSeconds / 60)} min drive</p>
                     )}
                   </div>
                   <div className="text-center">
-                    <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Estimated Fare</p>
-                    <p className="text-5xl font-black text-black">₹{fare.fare}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold mb-1">Estimated Fare</p>
+                    <p className="text-5xl font-black text-foreground">₹{fare.fare}</p>
                   </div>
                   <div className="text-right">
                     <motion.button
