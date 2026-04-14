@@ -8,6 +8,9 @@
         "erasableSyntaxOnly": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
+        "outDir": "dist",
+        "rootDir": "src",
         "strict": false
-    }
+    },
+    "include": ["src/**/*"]
 }
