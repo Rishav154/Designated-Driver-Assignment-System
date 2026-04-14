@@ -17,11 +17,12 @@ dotenv.config()
 
 const app = express()
 const httpServer = http.createServer(app)
+const origin = process.env.CORS_ORIGIN || process.env.FRONTEND_URL || 'http://localhost:3000'
 const io = new Server(httpServer, {
-    cors: { origin: 'http://localhost:3000' }
+    cors: { origin }
 })
 
-app.use(cors({ origin: 'http://localhost:3000' }))
+app.use(cors({ origin }))
 app.use(express.json({ limit: '10mb' })) // larger limit for base64 profile pictures
 app.use(clerkMiddleware())
 
