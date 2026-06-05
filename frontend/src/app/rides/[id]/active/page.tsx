@@ -20,7 +20,15 @@ interface RideData {
   dropoffLat: number
   dropoffLng: number
   fareEstimate: number
-  driver: { name: string; phone: string; vehicleMake?: string; vehicleModel?: string; numberPlate?: string }
+  driver: { 
+    name: string; 
+    phone: string; 
+    driverProfile?: { 
+      comfortableVehicles: string; 
+      age: number; 
+      gender: string 
+    } 
+  }
 }
 
 interface Location { lat: number; lng: number }
@@ -102,11 +110,11 @@ export default function ActiveRidePage() {
                   </a>
                 </div>
               </div>
-               {(ride.driver?.vehicleMake || ride.driver?.vehicleModel) && (
-                <p className="text-muted text-xs font-mono">
-                  {ride.driver.vehicleMake} {ride.driver.vehicleModel}
-                  {ride.driver.numberPlate ? ` · ${ride.driver.numberPlate}` : ''}
-                </p>
+               {ride.driver?.driverProfile && (
+                <div className="text-muted-foreground text-xs space-y-1 mt-2 border-t border-border pt-2">
+                  <p>Comfortable with: <span className="font-semibold text-foreground">{ride.driver.driverProfile.comfortableVehicles}</span></p>
+                  <p>Age: <span className="font-semibold text-foreground">{ride.driver.driverProfile.age}</span> · Gender: <span className="font-semibold text-foreground">{ride.driver.driverProfile.gender}</span></p>
+                </div>
               )}
             </div>
 

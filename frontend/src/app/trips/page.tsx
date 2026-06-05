@@ -46,20 +46,33 @@ export default function TripsPage() {
   const [role, setRole] = useState<'CUSTOMER' | 'DRIVER' | null>(null)
 
   const fetchHistory = async (p: number) => {
-    // If we have data for this page, don't show the full-screen loader
     const cacheKey = `/api/rides/history?page=${p}`
     const cached = getCache(cacheKey)
-    if (cached && !data) {
-        setData(cached)
-        setLoading(false)
+    if (cached) {
+      setData(cached)
+    } else {
+      setLoading(true)
     }
 
-    setLoading(true)
     try {
       const api = await getApi(getToken)
-      const res = await api.get(`/api/rides/history?page=${p}&limit=10`)
-      setData(res.data)
-      setCache(cacheKey, res.data)
+      const promises: [Promise<any>, Promise<any>?] = [
+        api.get(`/api/rides/history?page=${p}&limit=10`)
+      ]
+      if (!role) {
+        promises.push(api.get('/api/auth/me'))
+      }
+
+      const [historyRes, authRes] = await Promise.all(promises)
+      
+      setData(historyRes.data)
+      setCache(cacheKey, historyRes.data)
+      
+      if (authRes) {
+        setRole(authRes.data?.role)
+        setCache('/api/auth/me', authRes.data)
+      }
+      
       setPage(p)
     } catch {
       toast('Failed to load trip history', 'error')
@@ -71,14 +84,14 @@ export default function TripsPage() {
   useEffect(() => { 
     const cacheKey = `/api/rides/history?page=1`
     const cached = getCache(cacheKey)
+    const cachedAuth = getCache('/api/auth/me')
     if (cached) {
       setData(cached)
       setLoading(false)
     }
-
-    getApi(getToken).then(api => api.get('/api/auth/me')).then(res => {
-      setRole(res.data?.role)
-    })
+    if (cachedAuth) {
+      setRole(cachedAuth.role)
+    }
 
     fetchHistory(1) 
   }, [])

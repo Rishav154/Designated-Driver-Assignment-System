@@ -48,15 +48,15 @@ model Notification {
 }
 
 model DriverProfile {
-  id           String  @id @default(uuid())
-  userId       String  @unique
-  user         User    @relation(fields: [userId], references: [id])
-  licenseNo    String
-  vehicleMake  String
-  vehicleModel String
-  vehiclePlate String
-  isAvailable  Boolean @default(false)
-  rating       Float   @default(5.0)
+  id                  String  @id @default(uuid())
+  userId              String  @unique
+  user                User    @relation(fields: [userId], references: [id])
+  licenseNo           String
+  comfortableVehicles String
+  age                 Int
+  gender              String
+  isAvailable         Boolean @default(false)
+  rating              Float   @default(5.0)
 }
 
 model Ride {

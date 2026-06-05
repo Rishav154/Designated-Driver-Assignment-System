@@ -13,6 +13,7 @@ import ratingsRoutes from './routes/ratings.ts'
 import locationsRoutes from './routes/locations.ts'
 import notificationsRoutes from './routes/notifications.ts'
 import { requireAuth } from './middleware/requireAuth.ts'
+import { startAutoCancelJob } from './utils/autoCancelRides.ts'
 dotenv.config()
 
 const app = express()
@@ -21,6 +22,8 @@ const origin = process.env.CORS_ORIGIN || process.env.FRONTEND_URL || 'http://lo
 const io = new Server(httpServer, {
     cors: { origin }
 })
+
+startAutoCancelJob(io)
 
 app.use(cors({ origin }))
 app.use(express.json({ limit: '10mb' })) // larger limit for base64 profile pictures

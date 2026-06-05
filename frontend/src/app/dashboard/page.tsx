@@ -49,36 +49,42 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const cachedAuth = getCache('/api/auth/me')
-    if (cachedAuth) {
-      if (cachedAuth.role === 'DRIVER') router.replace('/driver/dashboard')
-      else setChecking(false)
-    }
-
-    getApi(getToken)
-      .then((api) => api.get('/api/auth/me'))
-      .then((res) => {
-        setCache('/api/auth/me', res.data)
-        if (!res.data) router.replace('/onboarding')
-        else if (res.data.role === 'DRIVER') router.replace('/driver/dashboard')
-        else setChecking(false)
-      })
-      .catch(() => setChecking(false))
-  }, [])
-
-  // fetch saved locations for quick-select
-  useEffect(() => {
     const cachedLocs = getCache('/api/locations')
+
+    if (cachedAuth) {
+      if (cachedAuth.role === 'DRIVER') {
+        router.replace('/driver/dashboard')
+        return
+      } else {
+        setChecking(false)
+      }
+    }
     if (cachedLocs) {
       setSavedLocations(cachedLocs)
     }
 
     getApi(getToken)
-      .then(api => api.get('/api/locations'))
-      .then(res => {
-        setSavedLocations(res.data ?? [])
-        setCache('/api/locations', res.data ?? [])
+      .then((api) => Promise.all([
+        api.get('/api/auth/me'),
+        api.get('/api/locations')
+      ]))
+      .then(([authRes, locsRes]) => {
+        setCache('/api/auth/me', authRes.data)
+        setCache('/api/locations', locsRes.data ?? [])
+        
+        setSavedLocations(locsRes.data ?? [])
+
+        if (!authRes.data) {
+          router.replace('/onboarding')
+        } else if (authRes.data.role === 'DRIVER') {
+          router.replace('/driver/dashboard')
+        } else {
+          setChecking(false)
+        }
       })
-      .catch(() => { })
+      .catch(() => {
+        setChecking(false)
+      })
   }, [])
 
   async function estimateFare() {

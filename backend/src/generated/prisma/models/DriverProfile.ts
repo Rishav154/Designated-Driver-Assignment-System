@@ -27,10 +27,12 @@ export type AggregateDriverProfile = {
 }
 
 export type DriverProfileAvgAggregateOutputType = {
+  age: number | null
   rating: number | null
 }
 
 export type DriverProfileSumAggregateOutputType = {
+  age: number | null
   rating: number | null
 }
 
@@ -38,9 +40,9 @@ export type DriverProfileMinAggregateOutputType = {
   id: string | null
   userId: string | null
   licenseNo: string | null
-  vehicleMake: string | null
-  vehicleModel: string | null
-  vehiclePlate: string | null
+  comfortableVehicles: string | null
+  age: number | null
+  gender: string | null
   isAvailable: boolean | null
   rating: number | null
 }
@@ -49,9 +51,9 @@ export type DriverProfileMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   licenseNo: string | null
-  vehicleMake: string | null
-  vehicleModel: string | null
-  vehiclePlate: string | null
+  comfortableVehicles: string | null
+  age: number | null
+  gender: string | null
   isAvailable: boolean | null
   rating: number | null
 }
@@ -60,9 +62,9 @@ export type DriverProfileCountAggregateOutputType = {
   id: number
   userId: number
   licenseNo: number
-  vehicleMake: number
-  vehicleModel: number
-  vehiclePlate: number
+  comfortableVehicles: number
+  age: number
+  gender: number
   isAvailable: number
   rating: number
   _all: number
@@ -70,10 +72,12 @@ export type DriverProfileCountAggregateOutputType = {
 
 
 export type DriverProfileAvgAggregateInputType = {
+  age?: true
   rating?: true
 }
 
 export type DriverProfileSumAggregateInputType = {
+  age?: true
   rating?: true
 }
 
@@ -81,9 +85,9 @@ export type DriverProfileMinAggregateInputType = {
   id?: true
   userId?: true
   licenseNo?: true
-  vehicleMake?: true
-  vehicleModel?: true
-  vehiclePlate?: true
+  comfortableVehicles?: true
+  age?: true
+  gender?: true
   isAvailable?: true
   rating?: true
 }
@@ -92,9 +96,9 @@ export type DriverProfileMaxAggregateInputType = {
   id?: true
   userId?: true
   licenseNo?: true
-  vehicleMake?: true
-  vehicleModel?: true
-  vehiclePlate?: true
+  comfortableVehicles?: true
+  age?: true
+  gender?: true
   isAvailable?: true
   rating?: true
 }
@@ -103,9 +107,9 @@ export type DriverProfileCountAggregateInputType = {
   id?: true
   userId?: true
   licenseNo?: true
-  vehicleMake?: true
-  vehicleModel?: true
-  vehiclePlate?: true
+  comfortableVehicles?: true
+  age?: true
+  gender?: true
   isAvailable?: true
   rating?: true
   _all?: true
@@ -201,9 +205,9 @@ export type DriverProfileGroupByOutputType = {
   id: string
   userId: string
   licenseNo: string
-  vehicleMake: string
-  vehicleModel: string
-  vehiclePlate: string
+  comfortableVehicles: string
+  age: number
+  gender: string
   isAvailable: boolean
   rating: number
   _count: DriverProfileCountAggregateOutputType | null
@@ -235,9 +239,9 @@ export type DriverProfileWhereInput = {
   id?: Prisma.StringFilter<"DriverProfile"> | string
   userId?: Prisma.StringFilter<"DriverProfile"> | string
   licenseNo?: Prisma.StringFilter<"DriverProfile"> | string
-  vehicleMake?: Prisma.StringFilter<"DriverProfile"> | string
-  vehicleModel?: Prisma.StringFilter<"DriverProfile"> | string
-  vehiclePlate?: Prisma.StringFilter<"DriverProfile"> | string
+  comfortableVehicles?: Prisma.StringFilter<"DriverProfile"> | string
+  age?: Prisma.IntFilter<"DriverProfile"> | number
+  gender?: Prisma.StringFilter<"DriverProfile"> | string
   isAvailable?: Prisma.BoolFilter<"DriverProfile"> | boolean
   rating?: Prisma.FloatFilter<"DriverProfile"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -247,9 +251,9 @@ export type DriverProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   licenseNo?: Prisma.SortOrder
-  vehicleMake?: Prisma.SortOrder
-  vehicleModel?: Prisma.SortOrder
-  vehiclePlate?: Prisma.SortOrder
+  comfortableVehicles?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -262,9 +266,9 @@ export type DriverProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DriverProfileWhereInput[]
   NOT?: Prisma.DriverProfileWhereInput | Prisma.DriverProfileWhereInput[]
   licenseNo?: Prisma.StringFilter<"DriverProfile"> | string
-  vehicleMake?: Prisma.StringFilter<"DriverProfile"> | string
-  vehicleModel?: Prisma.StringFilter<"DriverProfile"> | string
-  vehiclePlate?: Prisma.StringFilter<"DriverProfile"> | string
+  comfortableVehicles?: Prisma.StringFilter<"DriverProfile"> | string
+  age?: Prisma.IntFilter<"DriverProfile"> | number
+  gender?: Prisma.StringFilter<"DriverProfile"> | string
   isAvailable?: Prisma.BoolFilter<"DriverProfile"> | boolean
   rating?: Prisma.FloatFilter<"DriverProfile"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -274,9 +278,9 @@ export type DriverProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   licenseNo?: Prisma.SortOrder
-  vehicleMake?: Prisma.SortOrder
-  vehicleModel?: Prisma.SortOrder
-  vehiclePlate?: Prisma.SortOrder
+  comfortableVehicles?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   _count?: Prisma.DriverProfileCountOrderByAggregateInput
@@ -293,9 +297,9 @@ export type DriverProfileScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
   userId?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
   licenseNo?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
-  vehicleMake?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
-  vehicleModel?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
-  vehiclePlate?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
+  comfortableVehicles?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
+  age?: Prisma.IntWithAggregatesFilter<"DriverProfile"> | number
+  gender?: Prisma.StringWithAggregatesFilter<"DriverProfile"> | string
   isAvailable?: Prisma.BoolWithAggregatesFilter<"DriverProfile"> | boolean
   rating?: Prisma.FloatWithAggregatesFilter<"DriverProfile"> | number
 }
@@ -303,9 +307,9 @@ export type DriverProfileScalarWhereWithAggregatesInput = {
 export type DriverProfileCreateInput = {
   id?: string
   licenseNo: string
-  vehicleMake: string
-  vehicleModel: string
-  vehiclePlate: string
+  comfortableVehicles: string
+  age: number
+  gender: string
   isAvailable?: boolean
   rating?: number
   user: Prisma.UserCreateNestedOneWithoutDriverProfileInput
@@ -315,9 +319,9 @@ export type DriverProfileUncheckedCreateInput = {
   id?: string
   userId: string
   licenseNo: string
-  vehicleMake: string
-  vehicleModel: string
-  vehiclePlate: string
+  comfortableVehicles: string
+  age: number
+  gender: string
   isAvailable?: boolean
   rating?: number
 }
@@ -325,9 +329,9 @@ export type DriverProfileUncheckedCreateInput = {
 export type DriverProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNo?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleMake?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleModel?: Prisma.StringFieldUpdateOperationsInput | string
-  vehiclePlate?: Prisma.StringFieldUpdateOperationsInput | string
+  comfortableVehicles?: Prisma.StringFieldUpdateOperationsInput | string
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutDriverProfileNestedInput
@@ -337,9 +341,9 @@ export type DriverProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNo?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleMake?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleModel?: Prisma.StringFieldUpdateOperationsInput | string
-  vehiclePlate?: Prisma.StringFieldUpdateOperationsInput | string
+  comfortableVehicles?: Prisma.StringFieldUpdateOperationsInput | string
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -348,9 +352,9 @@ export type DriverProfileCreateManyInput = {
   id?: string
   userId: string
   licenseNo: string
-  vehicleMake: string
-  vehicleModel: string
-  vehiclePlate: string
+  comfortableVehicles: string
+  age: number
+  gender: string
   isAvailable?: boolean
   rating?: number
 }
@@ -358,9 +362,9 @@ export type DriverProfileCreateManyInput = {
 export type DriverProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNo?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleMake?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleModel?: Prisma.StringFieldUpdateOperationsInput | string
-  vehiclePlate?: Prisma.StringFieldUpdateOperationsInput | string
+  comfortableVehicles?: Prisma.StringFieldUpdateOperationsInput | string
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -369,9 +373,9 @@ export type DriverProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNo?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleMake?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleModel?: Prisma.StringFieldUpdateOperationsInput | string
-  vehiclePlate?: Prisma.StringFieldUpdateOperationsInput | string
+  comfortableVehicles?: Prisma.StringFieldUpdateOperationsInput | string
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -385,14 +389,15 @@ export type DriverProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   licenseNo?: Prisma.SortOrder
-  vehicleMake?: Prisma.SortOrder
-  vehicleModel?: Prisma.SortOrder
-  vehiclePlate?: Prisma.SortOrder
+  comfortableVehicles?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
 
 export type DriverProfileAvgOrderByAggregateInput = {
+  age?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
 
@@ -400,9 +405,9 @@ export type DriverProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   licenseNo?: Prisma.SortOrder
-  vehicleMake?: Prisma.SortOrder
-  vehicleModel?: Prisma.SortOrder
-  vehiclePlate?: Prisma.SortOrder
+  comfortableVehicles?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
@@ -411,14 +416,15 @@ export type DriverProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   licenseNo?: Prisma.SortOrder
-  vehicleMake?: Prisma.SortOrder
-  vehicleModel?: Prisma.SortOrder
-  vehiclePlate?: Prisma.SortOrder
+  comfortableVehicles?: Prisma.SortOrder
+  age?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
 
 export type DriverProfileSumOrderByAggregateInput = {
+  age?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
 
@@ -454,12 +460,20 @@ export type DriverProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DriverProfileUpdateToOneWithWhereWithoutUserInput, Prisma.DriverProfileUpdateWithoutUserInput>, Prisma.DriverProfileUncheckedUpdateWithoutUserInput>
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DriverProfileCreateWithoutUserInput = {
   id?: string
   licenseNo: string
-  vehicleMake: string
-  vehicleModel: string
-  vehiclePlate: string
+  comfortableVehicles: string
+  age: number
+  gender: string
   isAvailable?: boolean
   rating?: number
 }
@@ -467,9 +481,9 @@ export type DriverProfileCreateWithoutUserInput = {
 export type DriverProfileUncheckedCreateWithoutUserInput = {
   id?: string
   licenseNo: string
-  vehicleMake: string
-  vehicleModel: string
-  vehiclePlate: string
+  comfortableVehicles: string
+  age: number
+  gender: string
   isAvailable?: boolean
   rating?: number
 }
@@ -493,9 +507,9 @@ export type DriverProfileUpdateToOneWithWhereWithoutUserInput = {
 export type DriverProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNo?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleMake?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleModel?: Prisma.StringFieldUpdateOperationsInput | string
-  vehiclePlate?: Prisma.StringFieldUpdateOperationsInput | string
+  comfortableVehicles?: Prisma.StringFieldUpdateOperationsInput | string
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -503,9 +517,9 @@ export type DriverProfileUpdateWithoutUserInput = {
 export type DriverProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNo?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleMake?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicleModel?: Prisma.StringFieldUpdateOperationsInput | string
-  vehiclePlate?: Prisma.StringFieldUpdateOperationsInput | string
+  comfortableVehicles?: Prisma.StringFieldUpdateOperationsInput | string
+  age?: Prisma.IntFieldUpdateOperationsInput | number
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
 }
@@ -516,9 +530,9 @@ export type DriverProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   userId?: boolean
   licenseNo?: boolean
-  vehicleMake?: boolean
-  vehicleModel?: boolean
-  vehiclePlate?: boolean
+  comfortableVehicles?: boolean
+  age?: boolean
+  gender?: boolean
   isAvailable?: boolean
   rating?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -528,9 +542,9 @@ export type DriverProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   userId?: boolean
   licenseNo?: boolean
-  vehicleMake?: boolean
-  vehicleModel?: boolean
-  vehiclePlate?: boolean
+  comfortableVehicles?: boolean
+  age?: boolean
+  gender?: boolean
   isAvailable?: boolean
   rating?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -540,9 +554,9 @@ export type DriverProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   userId?: boolean
   licenseNo?: boolean
-  vehicleMake?: boolean
-  vehicleModel?: boolean
-  vehiclePlate?: boolean
+  comfortableVehicles?: boolean
+  age?: boolean
+  gender?: boolean
   isAvailable?: boolean
   rating?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -552,14 +566,14 @@ export type DriverProfileSelectScalar = {
   id?: boolean
   userId?: boolean
   licenseNo?: boolean
-  vehicleMake?: boolean
-  vehicleModel?: boolean
-  vehiclePlate?: boolean
+  comfortableVehicles?: boolean
+  age?: boolean
+  gender?: boolean
   isAvailable?: boolean
   rating?: boolean
 }
 
-export type DriverProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "licenseNo" | "vehicleMake" | "vehicleModel" | "vehiclePlate" | "isAvailable" | "rating", ExtArgs["result"]["driverProfile"]>
+export type DriverProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "licenseNo" | "comfortableVehicles" | "age" | "gender" | "isAvailable" | "rating", ExtArgs["result"]["driverProfile"]>
 export type DriverProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -579,9 +593,9 @@ export type $DriverProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     userId: string
     licenseNo: string
-    vehicleMake: string
-    vehicleModel: string
-    vehiclePlate: string
+    comfortableVehicles: string
+    age: number
+    gender: string
     isAvailable: boolean
     rating: number
   }, ExtArgs["result"]["driverProfile"]>
@@ -1011,9 +1025,9 @@ export interface DriverProfileFieldRefs {
   readonly id: Prisma.FieldRef<"DriverProfile", 'String'>
   readonly userId: Prisma.FieldRef<"DriverProfile", 'String'>
   readonly licenseNo: Prisma.FieldRef<"DriverProfile", 'String'>
-  readonly vehicleMake: Prisma.FieldRef<"DriverProfile", 'String'>
-  readonly vehicleModel: Prisma.FieldRef<"DriverProfile", 'String'>
-  readonly vehiclePlate: Prisma.FieldRef<"DriverProfile", 'String'>
+  readonly comfortableVehicles: Prisma.FieldRef<"DriverProfile", 'String'>
+  readonly age: Prisma.FieldRef<"DriverProfile", 'Int'>
+  readonly gender: Prisma.FieldRef<"DriverProfile", 'String'>
   readonly isAvailable: Prisma.FieldRef<"DriverProfile", 'Boolean'>
   readonly rating: Prisma.FieldRef<"DriverProfile", 'Float'>
 }

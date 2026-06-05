@@ -1,6 +1,7 @@
 'use client'
 import { useAuth } from '@clerk/nextjs'
 import { useEffect, useState, useCallback } from 'react'
+import { useCache } from '@/context/CacheContext'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '@/components/Navbar'
@@ -64,6 +65,7 @@ const itemVariants = {
 
 export default function DriverDashboard() {
   const { getToken } = useAuth()
+  const { setCache, getCache } = useCache()
   const router = useRouter()
   const [available, setAvailable] = useState(false)
   const [rides, setRides] = useState<Ride[]>([])
@@ -100,6 +102,18 @@ export default function DriverDashboard() {
   }
 
   useEffect(() => {
+    const cachedAuth = getCache('/api/auth/me')
+    const cachedStats = getCache('/api/drivers/stats')
+    if (cachedAuth && cachedStats) {
+      if (cachedAuth.role !== 'DRIVER') {
+        router.replace('/dashboard')
+        return
+      }
+      setAvailable(cachedAuth.driverProfile?.isAvailable ?? false)
+      setStats(cachedStats)
+      setChecking(false)
+    }
+
     getApi(getToken)
       .then((api) => Promise.all([
         api.get('/api/auth/me'),
@@ -115,6 +129,8 @@ export default function DriverDashboard() {
           return
         }
         
+        setCache('/api/auth/me', authRes.data)
+        setCache('/api/drivers/stats', statsRes.data)
         setAvailable(authRes.data.driverProfile?.isAvailable ?? false)
         setStats(statsRes.data)
         setChecking(false)

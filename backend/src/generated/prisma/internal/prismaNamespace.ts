@@ -1011,9 +1011,9 @@ export const DriverProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   licenseNo: 'licenseNo',
-  vehicleMake: 'vehicleMake',
-  vehicleModel: 'vehicleModel',
-  vehiclePlate: 'vehiclePlate',
+  comfortableVehicles: 'comfortableVehicles',
+  age: 'age',
+  gender: 'gender',
   isAvailable: 'isAvailable',
   rating: 'rating'
 } as const
@@ -1175,20 +1175,6 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'RideStatus'
- */
-export type EnumRideStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RideStatus'>
-    
-
-
-/**
- * Reference to a field of type 'RideStatus[]'
- */
-export type ListEnumRideStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RideStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1199,6 +1185,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RideStatus'
+ */
+export type EnumRideStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RideStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'RideStatus[]'
+ */
+export type ListEnumRideStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RideStatus[]'>
     
 
 

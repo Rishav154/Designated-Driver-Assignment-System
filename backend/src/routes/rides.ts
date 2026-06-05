@@ -118,7 +118,7 @@ router.get('/history', requireAuth, async (req, res) => {
                 driver: {
                     select: {
                         id: true, name: true, phone: true, profilePicture: true,
-                        driverProfile: { select: { vehicleMake: true, vehicleModel: true, vehiclePlate: true, rating: true } }
+                        driverProfile: { select: { comfortableVehicles: true, age: true, gender: true, rating: true } }
                     }
                 },
                 payment: true,
@@ -145,7 +145,7 @@ router.get('/:id', requireAuth, async (req, res) => {
                 select: {
                     id: true,
                     name: true, phone: true, profilePicture: true,
-                    driverProfile: { select: { vehicleMake: true, vehicleModel: true, vehiclePlate: true, rating: true } }
+                    driverProfile: { select: { comfortableVehicles: true, age: true, gender: true, rating: true } }
                 }
             },
             payment: true,

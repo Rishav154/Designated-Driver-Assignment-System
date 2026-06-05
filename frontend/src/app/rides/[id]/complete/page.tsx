@@ -77,14 +77,16 @@ export default function CompletePage() {
         order_id: order.id,
         handler: async function (response: any) {
           try {
-            await api.post(`/api/payments/${rideId}/pay`, {
+            const verificationApi = await getApi(getToken)
+            await verificationApi.post(`/api/payments/${rideId}/pay`, {
               method: 'ONLINE',
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
             })
             setPaid(true)
-          } catch {
+          } catch (err) {
+            console.error('Payment verification error:', err)
             setError('Payment verification failed. Please try again or contact support.')
           } finally {
             setPaying(false)

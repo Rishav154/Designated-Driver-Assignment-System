@@ -15,20 +15,31 @@ router.post('/sync', requireAuth, async (req, res) => {
     }
 
     try {
-        // Handle case where user exists with same email but different clerkId
-        const existingByEmail = await prisma.user.findUnique({ where: { email } })
-        if (existingByEmail && existingByEmail.clerkId !== userId) {
+        // 1. Check if user already exists by clerkId
+        const existingByClerkId = await prisma.user.findUnique({ where: { clerkId: userId! } })
+        if (existingByClerkId) {
+            // Keep the existing role, do NOT allow changes
             const updated = await prisma.user.update({
-                where: { id: existingByEmail.id },
-                data: { clerkId: userId!, name, phone, role }
+                where: { id: existingByClerkId.id },
+                data: { name, phone } // Only allow updating name and phone
             })
             return res.json(updated)
         }
 
-        const user = await prisma.user.upsert({
-            where: { clerkId: userId! },
-            update: { name, email, phone, role },
-            create: { clerkId: userId!, name, email, phone, role }
+        // 2. Handle case where user exists with same email but different clerkId (e.g. email match from Clerk sync)
+        const existingByEmail = await prisma.user.findUnique({ where: { email } })
+        if (existingByEmail) {
+            // Keep the existing role, update clerkId
+            const updated = await prisma.user.update({
+                where: { id: existingByEmail.id },
+                data: { clerkId: userId!, name, phone } // Keep existingByEmail.role
+            })
+            return res.json(updated)
+        }
+
+        // 3. Create a new user since they don't exist yet
+        const user = await prisma.user.create({
+            data: { clerkId: userId!, name, email, phone, role }
         })
         res.json(user)
     } catch (err: any) {
@@ -40,13 +51,24 @@ router.post('/sync', requireAuth, async (req, res) => {
 // Save driver vehicle details
 router.post('/driver-profile', requireAuth, async (req, res) => {
     const { userId } = getAuth(req)
-    const { licenseNo, vehicleMake, vehicleModel, vehiclePlate } = req.body
+    const { licenseNo, comfortableVehicles, age, gender } = req.body
 
     const user = await prisma.user.findUnique({ where: { clerkId: userId! } })
     if (!user) return res.status(404).json({ error: 'User not found' })
 
+    const parsedAge = parseInt(age, 10)
+    if (isNaN(parsedAge) || parsedAge <= 0) {
+        return res.status(400).json({ error: 'Invalid age' })
+    }
+
     const profile = await prisma.driverProfile.create({
-        data: { userId: user.id, licenseNo, vehicleMake, vehicleModel, vehiclePlate }
+        data: { 
+            userId: user.id, 
+            licenseNo, 
+            comfortableVehicles, 
+            age: parsedAge, 
+            gender 
+        }
     })
     res.json(profile)
 })

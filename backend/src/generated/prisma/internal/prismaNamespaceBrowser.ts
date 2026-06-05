@@ -120,9 +120,9 @@ export const DriverProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   licenseNo: 'licenseNo',
-  vehicleMake: 'vehicleMake',
-  vehicleModel: 'vehicleModel',
-  vehiclePlate: 'vehiclePlate',
+  comfortableVehicles: 'comfortableVehicles',
+  age: 'age',
+  gender: 'gender',
   isAvailable: 'isAvailable',
   rating: 'rating'
 } as const

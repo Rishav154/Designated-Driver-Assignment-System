@@ -29,7 +29,7 @@ interface TripDetail {
   customer: { id: string; name: string; phone: string | null; profilePicture: string | null }
   driver: {
     id: string; name: string; phone: string | null; profilePicture: string | null
-    driverProfile: { vehicleMake: string; vehicleModel: string; vehiclePlate: string; rating: number } | null
+    driverProfile: { comfortableVehicles: string; age: number; gender: string; rating: number } | null
   } | null
   payment: { id: string; amount: number; status: string } | null
   ratings: { id: string; score: number; comment: string | null; raterId: string }[]
@@ -162,13 +162,13 @@ export default function TripDetailPage() {
                 <div className="bg-muted/30 rounded-xl p-4 space-y-1">
                    <InfoRow
                     icon={<Car size={14} className="text-muted-foreground" />}
-                    label="Vehicle"
-                    value={`${trip.driver.driverProfile.vehicleMake} ${trip.driver.driverProfile.vehicleModel}`}
+                    label="Comfortable Driving"
+                    value={trip.driver.driverProfile.comfortableVehicles}
                   />
                    <InfoRow
-                    icon={<span className="text-xs font-bold text-muted-foreground">🔢</span>}
-                    label="Plate"
-                    value={trip.driver.driverProfile.vehiclePlate}
+                    icon={<span className="text-xs font-bold text-muted-foreground">👤</span>}
+                    label="Age / Gender"
+                    value={`${trip.driver.driverProfile.age} years old · ${trip.driver.driverProfile.gender}`}
                   />
                   <InfoRow
                     icon={<Star size={14} className="text-yellow-500" />}
