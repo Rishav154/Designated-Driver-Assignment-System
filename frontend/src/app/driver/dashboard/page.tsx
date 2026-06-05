@@ -115,27 +115,35 @@ export default function DriverDashboard() {
     }
 
     getApi(getToken)
-      .then((api) => Promise.all([
-        api.get('/api/auth/me'),
-        api.get('/api/drivers/stats')
-      ]))
-      .then(([authRes, statsRes]) => {
-        if (!authRes.data) {
-          router.replace('/onboarding')
-          return
-        }
-        if (authRes.data.role !== 'DRIVER') {
-          router.replace('/dashboard')
-          return
-        }
-        
-        setCache('/api/auth/me', authRes.data)
-        setCache('/api/drivers/stats', statsRes.data)
-        setAvailable(authRes.data.driverProfile?.isAvailable ?? false)
-        setStats(statsRes.data)
+      .then((api) => {
+        return api.get('/api/auth/me').then((authRes) => {
+          if (!authRes.data) {
+            router.replace('/onboarding')
+            return
+          }
+          if (authRes.data.role !== 'DRIVER') {
+            router.replace('/dashboard')
+            return
+          }
+          
+          setCache('/api/auth/me', authRes.data)
+          setAvailable(authRes.data.driverProfile?.isAvailable ?? false)
+          setChecking(false)
+
+          return api.get('/api/drivers/stats')
+            .then((statsRes) => {
+              setCache('/api/drivers/stats', statsRes.data)
+              setStats(statsRes.data)
+            })
+            .catch((err) => {
+              console.error('Failed to load driver stats:', err)
+            })
+        })
+      })
+      .catch((err) => {
+        console.error('Driver dashboard auth check failed:', err)
         setChecking(false)
       })
-      .catch(() => setChecking(false))
   }, [getToken])
 
   useEffect(() => {

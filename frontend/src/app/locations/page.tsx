@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Plus, Pencil, Trash2, Home, Briefcase, Star } from 'lucide-react'
 import Navbar from '@/components/Navbar'
@@ -36,6 +37,7 @@ const PRESET_LABELS = ['Home', 'Work', 'Custom']
 
 export default function LocationsPage() {
   const { getToken } = useAuth()
+  const router = useRouter()
   const { setCache, getCache } = useCache()
   const [loading, setLoading] = useState(true)
   const [locations, setLocations] = useState<SavedLocation[]>([])
@@ -64,10 +66,18 @@ export default function LocationsPage() {
   const fetchLocations = async () => {
     try {
       const api = await getApi(getToken)
+      
+      const authRes = await api.get('/api/auth/me')
+      if (!authRes.data) {
+        router.replace('/onboarding')
+        return
+      }
+
       const res = await api.get('/api/locations')
       setLocations(res.data)
       setCache('/api/locations', res.data)
-    } catch {
+    } catch (err) {
+      console.error('Failed to load locations:', err)
       toast('Failed to load locations', 'error')
     } finally {
       setLoading(false)

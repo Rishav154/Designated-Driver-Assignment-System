@@ -56,25 +56,25 @@ export default function TripsPage() {
 
     try {
       const api = await getApi(getToken)
-      const promises: [Promise<any>, Promise<any>?] = [
-        api.get(`/api/rides/history?page=${p}&limit=10`)
-      ]
-      if (!role) {
-        promises.push(api.get('/api/auth/me'))
-      }
-
-      const [historyRes, authRes] = await Promise.all(promises)
       
-      setData(historyRes.data)
-      setCache(cacheKey, historyRes.data)
-      
-      if (authRes) {
-        setRole(authRes.data?.role)
+      let currentRole = role
+      if (!currentRole) {
+        const authRes = await api.get('/api/auth/me')
+        if (!authRes.data) {
+          router.replace('/onboarding')
+          return
+        }
+        currentRole = authRes.data.role
+        setRole(currentRole)
         setCache('/api/auth/me', authRes.data)
       }
-      
+
+      const historyRes = await api.get(`/api/rides/history?page=${p}&limit=10`)
+      setData(historyRes.data)
+      setCache(cacheKey, historyRes.data)
       setPage(p)
-    } catch {
+    } catch (err) {
+      console.error('Failed to load trip history:', err)
       toast('Failed to load trip history', 'error')
     } finally {
       setLoading(false)

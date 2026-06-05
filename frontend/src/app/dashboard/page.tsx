@@ -64,25 +64,32 @@ export default function DashboardPage() {
     }
 
     getApi(getToken)
-      .then((api) => Promise.all([
-        api.get('/api/auth/me'),
-        api.get('/api/locations')
-      ]))
-      .then(([authRes, locsRes]) => {
-        setCache('/api/auth/me', authRes.data)
-        setCache('/api/locations', locsRes.data ?? [])
-        
-        setSavedLocations(locsRes.data ?? [])
+      .then((api) => {
+        return api.get('/api/auth/me').then((authRes) => {
+          if (!authRes.data) {
+            router.replace('/onboarding')
+            return
+          }
+          if (authRes.data.role === 'DRIVER') {
+            router.replace('/driver/dashboard')
+            return
+          }
 
-        if (!authRes.data) {
-          router.replace('/onboarding')
-        } else if (authRes.data.role === 'DRIVER') {
-          router.replace('/driver/dashboard')
-        } else {
+          setCache('/api/auth/me', authRes.data)
           setChecking(false)
-        }
+
+          return api.get('/api/locations')
+            .then((locsRes) => {
+              setCache('/api/locations', locsRes.data ?? [])
+              setSavedLocations(locsRes.data ?? [])
+            })
+            .catch((err) => {
+              console.error('Failed to load locations:', err)
+            })
+        })
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('Dashboard auth check failed:', err)
         setChecking(false)
       })
   }, [])

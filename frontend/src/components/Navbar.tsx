@@ -9,6 +9,8 @@ import { useAuth } from '@clerk/nextjs'
 import { getApi } from '@/lib/api'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
+import { useCache } from '@/context/CacheContext'
+
 const navItems = [
   { href: '/dashboard', label: 'Book Ride', icon: Car },
   { href: '/trips', label: 'Trips', icon: Clock },
@@ -19,14 +21,20 @@ const navItems = [
 export default function Navbar() {
   const path = usePathname()
   const { getToken } = useAuth()
+  const { getCache } = useCache()
   const [role, setRole] = useState<string | null>(null)
 
   useEffect(() => {
+    const cachedAuth = getCache('/api/auth/me')
+    if (cachedAuth) {
+      setRole(cachedAuth.role)
+    }
+
     getApi(getToken)
       .then((api) => api.get('/api/auth/me'))
       .then((res) => setRole(res.data?.role))
       .catch(() => {})
-  }, [getToken])
+  }, [getToken, getCache])
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 h-16 bg-background/95 backdrop-blur-sm border-b border-border flex items-center justify-between px-6 gap-4 transition-colors duration-300">
@@ -36,11 +44,12 @@ export default function Navbar() {
 
       <div className="flex items-center gap-1">
         {navItems.map(({ href, label, icon: Icon }) => {
-          const active = path === href || path.startsWith(href + '/')
+          const targetHref = href === '/dashboard' && role === 'DRIVER' ? '/driver/dashboard' : href
+          const active = path === targetHref || path.startsWith(targetHref + '/')
           return (
             <Link
               key={href}
-              href={href}
+              href={targetHref}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-150
                 ${active
                   ? 'bg-foreground text-background'
@@ -57,7 +66,7 @@ export default function Navbar() {
 
       <div className="flex items-center gap-2 shrink-0">
         <ThemeToggle />
-        <NotificationBell />
+        {role && <NotificationBell />}
         <UserButton />
       </div>
     </nav>
